@@ -1,7 +1,7 @@
 // Thông tin cá nhân toàn trang — nguồn dữ liệu duy nhất cho các liên kết
 export const site = {
   name: 'Nguyễn Cao Bản',
-  shortName: 'NGUYỄN CAO BẢN',
+  shortName: 'Nguyễn Cao Bản',
   location: 'TP. Hồ Chí Minh, Việt Nam',
   timezone: 'Asia/Ho_Chi_Minh',
   github: 'https://github.com/caoban123',

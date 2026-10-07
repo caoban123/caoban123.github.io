@@ -68,27 +68,28 @@ export function Hero({ ready = true }) {
             </span>
           </motion.div>
 
-          {/* Tiêu đề tên người dùng — ĐÃ FIX LỖI CHE DẤU TIẾNG VIỆT */}
-          <h1 className="mb-6 font-display text-5xl font-black uppercase tracking-tight text-white sm:text-7xl lg:text-8xl">
-            {['NGUYỄN', 'CAO BẢN'].map((line, i) => (
-              <span
-                key={line}
-                className="block overflow-hidden pt-3 sm:pt-4 pb-2 sm:pb-3 -mt-2 sm:-mt-3"
+          {/* Tiêu đề tên người dùng — Tối ưu dấu tiếng Việt hoàn hảo, tuyệt đối không bị che khuất */}
+          <h1 className="mb-6 font-display text-5xl font-extrabold tracking-normal text-white sm:text-7xl lg:text-8xl">
+            <span className="block pt-2 pb-1">
+              <motion.span
+                className="inline-block leading-[1.22] text-white"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 30 }}
+                transition={{ duration: 0.9, delay: 0.1, ease }}
               >
-                <motion.span
-                  className={`inline-block leading-[1.15] py-0.5 ${
-                    i === 1
-                      ? 'bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan bg-clip-text text-transparent pb-1'
-                      : 'text-white'
-                  }`}
-                  initial={{ y: '130%' }}
-                  animate={{ y: ready ? '0%' : '130%' }}
-                  transition={{ duration: 1, delay: 0.1 + i * 0.14, ease }}
-                >
-                  {line}
-                </motion.span>
-              </span>
-            ))}
+                Nguyễn
+              </motion.span>
+            </span>
+            <span className="block pt-1 pb-2">
+              <motion.span
+                className="inline-block leading-[1.25] bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan bg-clip-text text-transparent pb-1"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 30 }}
+                transition={{ duration: 0.9, delay: 0.24, ease }}
+              >
+                Cao Bản
+              </motion.span>
+            </span>
           </h1>
 
           {/* Dynamic Role Switcher — Giữ nguyên thuật ngữ kỹ thuật */}
