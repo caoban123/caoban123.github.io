@@ -3,14 +3,14 @@ import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
 import { Float } from '@react-three/drei'
 
-// Sinh ngẫu nhiên các nơ-ron và liên kết mạng thần kinh AI
-function generateNeuralData(count = 55, maxDistance = 1.3) {
+// Sinh ngẫu nhiên các nơ-ron và liên kết mạng thần kinh AI (Tỉ lệ chuẩn, cân đối, không tràn khung)
+function generateNeuralData(count = 50, maxDistance = 0.95) {
   const points = []
   for (let i = 0; i < count; i++) {
-    // Phân bố đều trên khối cầu bán kính r ~ 1.8
+    // Phân bố đều trên khối cầu bán kính vừa vặn r ~ 0.85 -> 1.15
     const phi = Math.acos(2 * Math.random() - 1)
     const theta = Math.random() * Math.PI * 2
-    const r = 1.2 + Math.random() * 0.7
+    const r = 0.82 + Math.random() * 0.35
     points.push(new THREE.Vector3(
       r * Math.sin(phi) * Math.cos(theta),
       r * Math.sin(phi) * Math.sin(theta),
@@ -53,7 +53,7 @@ export function NeuralQuantumCore() {
   const ring3Ref = useRef()
   const neuralLinesRef = useRef()
 
-  const { nodePositions, linePositions } = useMemo(() => generateNeuralData(60, 1.25), [])
+  const { nodePositions, linePositions } = useMemo(() => generateNeuralData(52, 0.92), [])
 
   // Vòng lặp chuyển động mượt mà 60 FPS
   useFrame((state, delta) => {
@@ -71,7 +71,7 @@ export function NeuralQuantumCore() {
     if (innerCoreRef.current) {
       innerCoreRef.current.rotation.y += delta * 0.4
       innerCoreRef.current.rotation.x += delta * 0.25
-      const pulse = 1 + Math.sin(t * 2.5) * 0.08
+      const pulse = 1 + Math.sin(t * 2.5) * 0.06
       innerCoreRef.current.scale.set(pulse, pulse, pulse)
     }
 
@@ -92,12 +92,12 @@ export function NeuralQuantumCore() {
 
   return (
     <group ref={groupRef}>
-      <Float speed={2} rotationIntensity={0.2} floatIntensity={0.4}>
+      <Float speed={1.8} rotationIntensity={0.15} floatIntensity={0.25}>
         {/* 1. LÕI TINH THỂ LƯỢNG TỬ TRUNG TÂM (QUANTUM CRYSTAL CORE) */}
         <group ref={innerCoreRef}>
           {/* Lõi đa diện dạng khung lưới dây sắc nét */}
           <mesh>
-            <icosahedronGeometry args={[0.75, 1]} />
+            <icosahedronGeometry args={[0.55, 1]} />
             <meshStandardMaterial
               color="#22D3EE"
               emissive="#0284C7"
@@ -109,7 +109,7 @@ export function NeuralQuantumCore() {
           </mesh>
           {/* Khối cầu năng lượng nội tại rực sáng */}
           <mesh>
-            <sphereGeometry args={[0.48, 24, 24]} />
+            <sphereGeometry args={[0.36, 24, 24]} />
             <meshStandardMaterial
               color="#4F7CFF"
               emissive="#4F7CFF"
@@ -133,7 +133,7 @@ export function NeuralQuantumCore() {
               />
             </bufferGeometry>
             <pointsMaterial
-              size={0.065}
+              size={0.055}
               color="#22D3EE"
               transparent
               opacity={0.95}
@@ -160,28 +160,28 @@ export function NeuralQuantumCore() {
           </lineSegments>
         </group>
 
-        {/* 3. VÀNH ĐAI DỮ LIỆU ĐA TRỤC (QUANTUM ORBITAL RINGS) */}
-        {/* Vành đai 1: Cyan neon lớn */}
+        {/* 3. VÀNH ĐAI DỮ LIỆU ĐA TRỤC (QUANTUM ORBITAL RINGS) - Kích thước cân đối hoàn hảo */}
+        {/* Vành đai 1: Cyan neon */}
         <group ref={ring1Ref} rotation={[Math.PI / 4, 0, 0]}>
           <mesh>
-            <torusGeometry args={[1.9, 0.012, 16, 100]} />
-            <meshBasicMaterial color="#22D3EE" transparent opacity={0.65} />
+            <torusGeometry args={[1.25, 0.01, 16, 80]} />
+            <meshBasicMaterial color="#22D3EE" transparent opacity={0.7} />
           </mesh>
         </group>
 
         {/* Vành đai 2: Royal Blue nghiêng trục đối lập */}
         <group ref={ring2Ref} rotation={[-Math.PI / 3, Math.PI / 6, 0]}>
           <mesh>
-            <torusGeometry args={[2.1, 0.012, 16, 100]} />
-            <meshBasicMaterial color="#818CF8" transparent opacity={0.55} />
+            <torusGeometry args={[1.40, 0.01, 16, 80]} />
+            <meshBasicMaterial color="#818CF8" transparent opacity={0.6} />
           </mesh>
         </group>
 
         {/* Vành đai 3: Neon Violet vành ngoài */}
         <group ref={ring3Ref} rotation={[Math.PI / 6, -Math.PI / 4, Math.PI / 3]}>
           <mesh>
-            <torusGeometry args={[2.35, 0.01, 16, 100]} />
-            <meshBasicMaterial color="#C084FC" transparent opacity={0.45} />
+            <torusGeometry args={[1.55, 0.009, 16, 80]} />
+            <meshBasicMaterial color="#C084FC" transparent opacity={0.5} />
           </mesh>
         </group>
 
@@ -196,10 +196,10 @@ export function NeuralQuantumCore() {
             />
           </bufferGeometry>
           <pointsMaterial
-            size={0.035}
+            size={0.03}
             color="#A855F7"
             transparent
-            opacity={0.8}
+            opacity={0.75}
             blending={THREE.AdditiveBlending}
           />
         </points>

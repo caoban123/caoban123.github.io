@@ -42,13 +42,13 @@ export function Hero({ ready = true }) {
       {/* Lưới nền tinh tế */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
 
-      <div className="relative mx-auto my-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-12">
-        {/* 3D Visual Shader Orb */}
+      <div className="relative mx-auto my-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 px-6 lg:grid-cols-12 lg:gap-12">
+        {/* 3D Visual AI Quantum Core — Luôn nằm trong luồng giao diện chuẩn, tuyệt đối không đè lấn text */}
         <motion.div
           initial={{ opacity: 0, scale: 0.92 }}
           animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.92 }}
           transition={{ duration: 1.4, delay: 0.3, ease }}
-          className="pointer-events-none absolute inset-x-0 top-0 h-[70vh] opacity-40 lg:pointer-events-auto lg:relative lg:order-2 lg:col-span-5 lg:h-[560px] lg:opacity-100"
+          className="order-2 flex items-center justify-center h-[340px] sm:h-[420px] md:h-[480px] lg:h-[540px] w-full relative lg:order-2 lg:col-span-5"
         >
           {reduced ? (
             <StaticPlaceholder />
@@ -60,7 +60,7 @@ export function Hero({ ready = true }) {
         </motion.div>
 
         {/* Nội dung bên trái */}
-        <div className="relative z-10 flex flex-col justify-center lg:order-1 lg:col-span-7">
+        <div className="order-1 relative z-10 flex flex-col justify-center lg:order-1 lg:col-span-7">
           {/* Trạng thái hoạt động (Tối giản, chuyên nghiệp) */}
           <motion.div
             variants={fadeUp(0)}

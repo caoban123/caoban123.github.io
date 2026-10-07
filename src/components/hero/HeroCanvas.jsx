@@ -26,20 +26,13 @@ export default function HeroCanvas() {
   }, [])
 
   return (
-    <div
-      ref={wrapRef}
-      className="relative h-full w-full"
-      style={{
-        maskImage: 'radial-gradient(circle at center, black 65%, transparent 100%)',
-        WebkitMaskImage: 'radial-gradient(circle at center, black 65%, transparent 100%)',
-      }}
-    >
+    <div ref={wrapRef} className="relative h-full w-full overflow-visible">
       <Suspense fallback={<StaticFallback />}>
         <Canvas
           flat
           dpr={[1, 1.5]}
           frameloop={visible ? 'always' : 'never'}
-          camera={{ position: [0, 0, 5.2], fov: 45 }}
+          camera={{ position: [0, 0, 5.5], fov: 45 }}
           gl={{ antialias: true, powerPreference: 'high-performance' }}
         >
           {/* Ánh sáng cyberpunk */}
