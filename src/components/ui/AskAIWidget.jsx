@@ -29,6 +29,16 @@ const KNOWLEDGE_BASE = [
       'Dự án Computer Vision nổi bật của Bản là "Football Computer Vision": Pipeline tích hợp YOLO phát hiện cầu thủ, ByteTrack theo dõi đa đối tượng liên khung hình và SigLIP trích xuất đặc trưng ngoại hình để phục vụ phân tích chiến thuật thời gian thực.',
   },
   {
+    triggers: ['campus', 'smart campus', 'hcmus-smart-campus', 'wesome', 'agent space'],
+    answer:
+      'Dự án "HCMUS Smart Campus" là nguyên mẫu AI Agent Space phát triển cho 2026 Global AI Agent Competition (Track A trên nền tảng Wesome AI). Hệ thống sử dụng kiến trúc phân cấp gồm Campus Router và Aggregator điều phối hơn 14 Agent chuyên trách trong 5 phân hệ dịch vụ học đường.',
+  },
+  {
+    triggers: ['aic', 'video retrieval', 'multi-model', 'clip', 'bge', 'faiss', 'cuộc thi', 'contest'],
+    answer:
+      'Dự án "Multi-modal AIC Video Retrieval" là hệ thống truy xuất video quy mô lớn phục vụ cuộc thi AI Challenge (AIC). Hệ thống kết hợp CLIP visual search, BGE-M3 FAISS semantic text, BM25 lexical text, intent-aware routing (RRF) và Gemini VLM phục vụ KIS, Q&A và TRAKE temporal alignment.',
+  },
+  {
     triggers: ['nghiên cứu', 'research', 'khoa học', 'rectified flow', 'video', 'bài báo'],
     answer:
       `Chủ đề nghiên cứu của Bản là: "${researchData.primaryTopic}". Nghiên cứu tập trung vào kiểm soát thích ứng không - thời gian trong mô hình Rectified Flow phục vụ biên tập video chính xác và mượt mà.`,
