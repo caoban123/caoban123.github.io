@@ -61,7 +61,7 @@ export function Navbar() {
               <img
                 src={`${import.meta.env.BASE_URL}images/avatar.png`}
                 alt="Avatar"
-                className="h-full w-full object-cover object-top"
+                className="h-full w-full object-cover object-[center_36%] scale-105"
               />
             </div>
             {site.shortName}

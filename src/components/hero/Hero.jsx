@@ -77,7 +77,7 @@ export function Hero({ ready = true }) {
                 <img
                   src={`${import.meta.env.BASE_URL}images/avatar.png`}
                   alt="Nguyễn Cao Bản"
-                  className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full object-cover object-[center_36%] scale-105 transition-transform duration-500 group-hover:scale-115"
                   loading="eager"
                 />
               </div>
