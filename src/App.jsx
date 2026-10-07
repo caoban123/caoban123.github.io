@@ -3,6 +3,7 @@ import { AnimatePresence } from 'framer-motion'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SmoothScroll } from './components/layout/SmoothScroll'
 import { CosmicBackground } from './components/background/CosmicBackground'
+import { SectionTint } from './components/background/SectionTint'
 import { Cursor } from './components/ui/Cursor'
 import { Preloader } from './components/ui/Preloader'
 import { CommandPalette } from './components/ui/CommandPalette'
@@ -44,6 +45,9 @@ export default function App() {
       <div className="relative min-h-screen bg-[#050505] text-[#F5F5F5]">
         {/* Background Động Siêu Cấp Thẩm Mỹ (Luxury Artwork + 3D Warp Stars + Aurora Fluid Smoke) */}
         <CosmicBackground />
+
+        {/* Tông màu chuyển dần theo từng phân mục */}
+        <SectionTint />
 
         {/* Con trỏ thông minh desktop */}
         <Cursor />

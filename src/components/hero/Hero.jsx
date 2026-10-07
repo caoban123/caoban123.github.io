@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, Github, FileText, Command, Sparkles, ScanEye, Gauge } from 'lucide-react'
 import { ScrambleText } from '../ui/ScrambleText'
 import { Magnetic } from '../ui/Magnetic'
@@ -35,6 +35,7 @@ export function Hero({ ready = true }) {
   const reduced = useReducedMotion()
   const spotRef = useRef(null)
   const rafRef = useRef(0)
+  const sectionRef = useRef(null)
 
   useEffect(() => {
     if (!ready) return
@@ -66,46 +67,65 @@ export function Hero({ ready = true }) {
     show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 1.1, delay, ease } },
   })
 
+  // Parallax khi cuộn: chữ mờ dần & lùi ra sau, nền trôi chậm hơn tạo chiều sâu
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] })
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 220])
+  const contentScale = useTransform(scrollYProgress, [0, 1], [1, reduced ? 1 : 0.88])
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
+  const orbitY = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 90])
+  const orbitScale = useTransform(scrollYProgress, [0, 1], [1, reduced ? 1 : 1.25])
+  const orbitRotate = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 25])
+  const auroraY = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : 40])
+
   return (
     <section
+      ref={sectionRef}
       id="home"
       onMouseMove={handleMove}
       className="relative flex min-h-screen flex-col justify-center overflow-hidden pb-8 pt-28"
     >
       {/* Aurora nền trôi chậm */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <motion.div style={{ y: auroraY }} className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="aurora-blob aurora-a left-[10%] top-[15%] h-[340px] w-[340px] bg-accent-blue/60" />
         <div className="aurora-blob aurora-b right-[8%] top-[25%] h-[300px] w-[300px] bg-accent-purple/60" />
         <div className="aurora-blob aurora-c bottom-[10%] left-[35%] h-[280px] w-[380px] bg-accent-cyan/40" />
-      </div>
+      </motion.div>
 
       {/* Lưới nền tinh tế */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#ffffff07_1px,transparent_1px),linear-gradient(to_bottom,#ffffff07_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_60%,transparent_100%)]" />
 
-      {/* Vòng quỹ đạo xoay */}
+      {/* Vòng quỹ đạo xoay (parallax chậm hơn chữ) */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.85 }}
-        animate={{ opacity: ready ? 1 : 0, scale: ready ? 1 : 0.85 }}
-        transition={{ duration: 1.6, ease }}
-        className="pointer-events-none absolute inset-0 [mask-image:radial-gradient(circle_at_50%_50%,#000_35%,transparent_75%)]"
+        style={{ y: orbitY, scale: orbitScale, rotate: orbitRotate }}
+        className="pointer-events-none absolute inset-0"
       >
-        {orbits.map((o, i) => (
-          <div key={i} className={`orbit ${o.size}`}>
-            <div
-              className="orbit-spin"
-              style={{ animationDuration: o.duration, animationDirection: o.reverse ? 'reverse' : 'normal' }}
-            >
-              <span className={`orbit-dot ${o.dot}`} />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={{ opacity: ready ? 1 : 0, scale: ready ? 1 : 0.85 }}
+          transition={{ duration: 1.6, ease }}
+          className="absolute inset-0 [mask-image:radial-gradient(circle_at_50%_50%,#000_35%,transparent_75%)]"
+        >
+          {orbits.map((o, i) => (
+            <div key={i} className={`orbit ${o.size}`}>
+              <div
+                className="orbit-spin"
+                style={{ animationDuration: o.duration, animationDirection: o.reverse ? 'reverse' : 'normal' }}
+              >
+                <span className={`orbit-dot ${o.dot}`} />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </motion.div>
       </motion.div>
 
       {/* Spotlight theo chuột */}
       <div ref={spotRef} className="hero-spotlight pointer-events-none absolute inset-0" />
 
       {/* Nội dung Hero căn giữa hoàn toàn */}
-      <div className="relative z-10 mx-auto my-auto flex w-full max-w-5xl flex-col items-center justify-center px-6 text-center">
+      <motion.div
+        style={{ y: contentY, scale: contentScale, opacity: contentOpacity }}
+        className="relative z-10 mx-auto my-auto flex w-full max-w-5xl flex-col items-center justify-center px-6 text-center will-change-transform"
+      >
         {/* Trạng thái hoạt động với viền sáng xoay */}
         <motion.div
           variants={fadeUp(0)}
@@ -246,7 +266,7 @@ export function Hero({ ready = true }) {
             </Magnetic>
           )}
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* Thanh chân Hero: Bảng lệnh & Cuộn trang */}
       <motion.div

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
 import { Github, Linkedin, Facebook, Menu, X, Command } from 'lucide-react'
 import { scrollToTarget } from '../../lib/scroll'
 import { site } from '../../data/site'
@@ -20,6 +20,8 @@ export function Navbar() {
   const [activeSection, setActiveSection] = useState('home')
   const [menuOpen, setMenuOpen] = useState(false)
   const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform)
+  const { scrollYProgress } = useScroll()
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 25, restDelta: 0.001 })
 
   useEffect(() => {
     const onScroll = () => {
@@ -151,6 +153,13 @@ export function Navbar() {
             {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
+
+        {/* Thanh tiến độ cuộn trang */}
+        <motion.div
+          aria-hidden
+          style={{ scaleX: progress }}
+          className="absolute bottom-0 left-0 right-0 h-[2px] origin-left bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan shadow-[0_0_10px_rgba(79,124,255,0.7)]"
+        />
       </header>
 
       {/* Menu Mobile tiếng Việt */}
