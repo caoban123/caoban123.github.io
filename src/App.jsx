@@ -42,7 +42,7 @@ export default function App() {
       <AnimatePresence>{loading && <Preloader key="preloader" onComplete={finishLoading} />}</AnimatePresence>
 
       <div className="relative min-h-screen bg-[#050505] text-[#F5F5F5]">
-        {/* Background thẩm mỹ sang trọng cao cấp tĩnh (Luxury Dark Aesthetic Wallpaper + Ambient Glow) */}
+        {/* Background Động Siêu Cấp Thẩm Mỹ (Luxury Artwork + 3D Warp Stars + Aurora Fluid Smoke) */}
         <CosmicBackground />
 
         {/* Con trỏ thông minh desktop */}

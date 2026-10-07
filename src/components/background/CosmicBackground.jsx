@@ -5,19 +5,18 @@ import { useReducedMotion } from '../../hooks/useReducedMotion'
 
 /**
  * Background Động Siêu Cấp Thẩm Mỹ (Ultra-Aesthetic Dynamic Hybrid Background)
- * - Tầng 1 (Visual Artwork): Hình nền nghệ thuật dải sóng lụa dạ quang cực quang (Obsidian Aurora waves) 
- *   độ nét cao, ánh sáng tím Violet và Cyan mờ ảo tạo chiều sâu không gian.
+ * - Tầng 1 (Visual Artwork): Hình nền dải sóng lụa dạ quang cực quang Obsidian độ nét cao.
  * - Tầng 2 (Ambient Glows): Quầng sáng đa chiều phát tán dịu nhẹ.
- * - Tầng 3 (Motion Effect 1): Đường hầm sao lượng tử 3D (HyperspaceWarp) trong suốt — khi cuộn trang sao kéo vệt sáng siêu tốc.
- * - Tầng 4 (Motion Effect 2): Khói chất lỏng cực quang Navier-Stokes (FluidSmoke) — tương tác xoáy sóng lụa mượt mà theo đường di chuột.
- * - Tầng 5 (Cinema Grading): Lớp Micro-grid công nghệ và Vignette tối góc giữ trọn vẹn độ sắc nét, tương phản cho chữ.
+ * - Tầng 3 (Motion Effect 1): Đường hầm sao lượng tử 3D trong suốt (Hyperspace Warp).
+ * - Tầng 4 (Motion Effect 2): Khói chất lỏng cực quang Navier-Stokes tương tác chuột 100% trên cả Desktop & Mobile.
+ * - Tầng 5 (Cinema Grading): Lưới Micro-grid công nghệ và Vignette điện ảnh.
  */
 export function CosmicBackground() {
   const reducedMotion = useReducedMotion()
   const bgUrl = `${import.meta.env.BASE_URL}images/bg-luxury.jpg`
 
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 h-full w-full overflow-hidden bg-[#050505]">
+    <div className="pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden bg-[#050505]">
       {/* 1. Hình nền nghệ thuật dải sóng lụa cực quang Obsidian */}
       <img
         src={bgUrl}
@@ -35,13 +34,13 @@ export function CosmicBackground() {
       {/* 3. Hiệu ứng động 1: Đường hầm sao lượng tử 3D trong suốt */}
       {!reducedMotion && <HyperspaceWarp />}
 
-      {/* 4. Hiệu ứng động 2: Khói chất lỏng cực quang tương tác chuột */}
+      {/* 4. Hiệu ứng động 2: Khói chất lỏng cực quang tương tác chuột trực tiếp */}
       {!reducedMotion && <FluidSmoke />}
 
       {/* 5. Lưới Micro-grid công nghệ tinh tế */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_70%_at_50%_50%,#000_50%,transparent_100%)] opacity-35" />
 
-      {/* 6. Lớp Vignette viền tối điện ảnh — giữ tương phản hoàn hảo cho nội dung */}
+      {/* 6. Lớp Vignette viền tối điện ảnh */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,5,5,0.55)_75%,rgba(5,5,5,0.92)_100%)]" />
     </div>
   )
