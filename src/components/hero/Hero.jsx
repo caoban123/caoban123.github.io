@@ -61,54 +61,18 @@ export function Hero({ ready = true }) {
 
         {/* Nội dung bên trái */}
         <div className="relative z-10 flex flex-col justify-center lg:order-1 lg:col-span-7">
-          {/* Spotlight Định danh cá nhân: Cyber Identity Badge */}
+          {/* Trạng thái hoạt động (Tối giản, chuyên nghiệp) */}
           <motion.div
             variants={fadeUp(0)}
             initial="hidden"
             animate={show}
-            className="mb-8 inline-flex items-center gap-4 sm:gap-5 rounded-2xl border border-white/[0.1] bg-white/[0.03] p-2.5 pr-6 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.36)] transition-all duration-300 hover:border-white/20 hover:bg-white/[0.05] w-fit"
+            className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 font-mono text-xs font-medium text-emerald-400 backdrop-blur-md w-fit shadow-[0_0_15px_rgba(16,185,129,0.15)]"
           >
-            {/* Khung ảnh đại diện tròn nổi bật với hào quang đa sắc */}
-            <div className="relative group shrink-0">
-              {/* Vầng hào quang chuyển sắc phía sau */}
-              <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-accent-blue via-accent-purple to-accent-cyan opacity-80 blur-md transition duration-500 group-hover:opacity-100 group-hover:blur-lg" />
-
-              {/* Khung Avatar cao cấp */}
-              <div className="relative h-16 w-16 sm:h-20 sm:w-20 overflow-hidden rounded-full border-2 border-white/30 bg-zinc-950 shadow-[0_0_25px_rgba(79,124,255,0.4)]">
-                <img
-                  src={`${import.meta.env.BASE_URL}images/avatar.png`}
-                  alt="Nguyễn Cao Bản"
-                  className="h-full w-full object-cover object-[center_36%] scale-105 transition-transform duration-500 group-hover:scale-110"
-                  loading="eager"
-                />
-              </div>
-
-              {/* Huy hiệu Active tinh xảo ở góc dưới */}
-              <div
-                className="absolute bottom-0.5 right-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-[#050505] ring-2 ring-[#050505]"
-                title="Đang sẵn sàng nhận dự án"
-              >
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10B981]" />
-                </span>
-              </div>
-            </div>
-
-            {/* Thông tin giới thiệu bên cạnh: Bố cục thanh lịch, công nghệ cao */}
-            <div className="flex flex-col gap-1.5">
-              <div className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan shadow-[0_0_8px_#22D3EE] animate-pulse" />
-                <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent-cyan font-semibold">
-                  XIN CHÀO, TÔI LÀ
-                </span>
-              </div>
-
-              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-3 py-0.5 font-mono text-[11px] font-medium text-emerald-400 backdrop-blur-md w-fit shadow-[0_0_12px_rgba(16,185,129,0.2)]">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Sẵn sàng cho dự án AI &amp; Nghiên cứu</span>
-              </div>
-            </div>
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10B981]" />
+            </span>
+            <span>Sẵn sàng cho dự án AI &amp; Nghiên cứu</span>
           </motion.div>
 
           {/* Tiêu đề tên người dùng — Tối ưu dấu tiếng Việt hoàn hảo, tuyệt đối không bị che khuất */}

@@ -18,22 +18,22 @@ export function FluidSmoke() {
       fluid.setConfig({
         simResolution: 128,
         dyeResolution: 1024,
-        densityDissipation: 2.0, // Khói tan êm ái sau ~1.5 giây
-        velocityDissipation: 1.5,
+        densityDissipation: 3.2, // Khói tan nhanh và êm sau ~0.8 giây, không bị đọng bọng
+        velocityDissipation: 1.8,
         pressure: 0.8,
-        curl: 30, // Xoáy cuộn mềm mại
-        splatRadius: 0.28, // Kích thước dải lụa rõ ràng, đẹp mắt
-        splatForce: 6000, // Lực đẩy chuẩn của thư viện để khói bung nở sống động
+        curl: 24, // Xoáy cuộn mềm mại, thanh mảnh
+        splatRadius: 0.10, // Kích thước dải khói thu nhỏ thanh mảnh, tinh tế, không bị bự
+        splatForce: 2500, // Lực đẩy vừa phải, êm dịu
         shading: true,
         colorful: false,
-        colorPalette: ['#22D3EE', '#4F7CFF', '#8B5CF6', '#EC4899', '#06B6D4'], // Cyber Cyan, Electric Blue, Violet, Neon Pink
+        colorPalette: ['#22D3EE', '#4F7CFF', '#8B5CF6', '#06B6D4'], // Dải màu Cyber Blue & Violet dịu mắt
         hover: true,
         transparent: true,
         backgroundColor: '#00000000',
         bloom: true,
-        bloomIntensity: 0.65, // Phát sáng sống động, huyền ảo
-        bloomThreshold: 0.45,
-        brightness: 0.9, // Sắc nét, nổi bật trên nền đen
+        bloomIntensity: 0.18, // Giảm mạnh phát quang để tuyệt đối không chói mắt
+        bloomThreshold: 0.72,
+        brightness: 0.45, // Độ sáng vừa dịu, sang trọng trên nền tối
       })
 
       fluid.start()
@@ -43,7 +43,7 @@ export function FluidSmoke() {
         try {
           const cx = window.innerWidth / 2
           const cy = window.innerHeight * 0.45
-          fluid.splatAtLocation(cx, cy, 300, 180)
+          fluid.splatAtLocation(cx, cy, 120, 80)
         } catch (e) {}
       }, 350)
     } catch (err) {
@@ -52,18 +52,17 @@ export function FluidSmoke() {
     }
 
     const PALETTE = [
-      { r: 0.15, g: 0.85, b: 1.0 }, // Cyber Cyan
-      { r: 0.35, g: 0.55, b: 1.0 }, // Electric Blue
-      { r: 0.7, g: 0.35, b: 1.0 },  // Neon Violet
-      { r: 0.15, g: 0.95, b: 0.7 }, // Emerald Teal
-      { r: 0.95, g: 0.4, b: 0.85 }, // Laser Pink
+      { r: 0.12, g: 0.55, b: 0.85 }, // Deep Cyan Blue
+      { r: 0.25, g: 0.4, b: 0.9 },   // Royal Blue
+      { r: 0.45, g: 0.25, b: 0.8 },  // Soft Violet
+      { r: 0.12, g: 0.65, b: 0.55 }, // Muted Emerald
     ]
     let colorIdx = 0
     const getNextColor = () => {
       const base = PALETTE[colorIdx % PALETTE.length]
       colorIdx++
-      // Nhân cường độ để vệt khói phát sáng neon rực rỡ và mềm mại
-      return { r: base.r * 8.5, g: base.g * 8.5, b: base.b * 8.5 }
+      // Cường độ vừa phải, màu sắc êm dịu, không bị chói trắng
+      return { r: base.r * 1.3, g: base.g * 1.3, b: base.b * 1.3 }
     }
 
     let lastX = 0
@@ -97,8 +96,8 @@ export function FluidSmoke() {
       if (dist > 1.5) {
         const normX = Math.max(0, Math.min(1, x / window.innerWidth))
         const normY = Math.max(0, Math.min(1, 1 - y / window.innerHeight))
-        const forceX = dx * 40
-        const forceY = -dy * 40
+        const forceX = dx * 16
+        const forceY = -dy * 16
         const color = getNextColor()
 
         if (fluid.simulation && typeof fluid.simulation.splat === 'function') {
@@ -119,15 +118,11 @@ export function FluidSmoke() {
       const color = getNextColor()
 
       if (fluid.simulation && typeof fluid.simulation.splat === 'function') {
-        // Tỏa sóng xung kích khói đa hướng khi click chuột
-        for (let i = 0; i < 4; i++) {
-          const angle = (i / 4) * Math.PI * 2
-          const fx = Math.cos(angle) * 350
-          const fy = Math.sin(angle) * 350
-          fluid.simulation.splat(normX, normY, fx, fy, color)
-        }
+        // Tỏa làn khói dịu nhẹ khi click
+        fluid.simulation.splat(normX, normY, 150, 150, color)
+        fluid.simulation.splat(normX, normY, -150, -150, color)
       } else {
-        fluid.splatAtLocation(e.clientX, e.clientY, 350, 350)
+        fluid.splatAtLocation(e.clientX, e.clientY, 150, 150)
       }
     }
 
@@ -137,7 +132,7 @@ export function FluidSmoke() {
       handlePointerMove({ clientX: touch.clientX, clientY: touch.clientY })
     }
 
-    // Khi cuộn trang, tạo vệt khói dạ quang
+    // Khi cuộn trang, tạo vệt khói dạ quang nhẹ
     let lastScrollY = window.scrollY
     let scrollThrottle = 0
     const handleScroll = () => {
@@ -147,13 +142,13 @@ export function FluidSmoke() {
       const delta = Math.abs(currentScrollY - lastScrollY)
       lastScrollY = currentScrollY
 
-      if (delta > 35 && fluid) {
+      if (delta > 40 && fluid) {
         scrollThrottle = now
-        const normX = 0.2 + Math.random() * 0.6
-        const normY = 0.25 + Math.random() * 0.5
+        const normX = 0.25 + Math.random() * 0.5
+        const normY = 0.3 + Math.random() * 0.4
         const color = getNextColor()
         if (fluid.simulation && typeof fluid.simulation.splat === 'function') {
-          fluid.simulation.splat(normX, normY, (Math.random() - 0.5) * 450, -delta * 3.5, color)
+          fluid.simulation.splat(normX, normY, (Math.random() - 0.5) * 200, -delta * 2, color)
         }
       }
     }
@@ -182,7 +177,7 @@ export function FluidSmoke() {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden opacity-90"
+      className="pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden opacity-45"
     />
   )
 }
