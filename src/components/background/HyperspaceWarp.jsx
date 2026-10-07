@@ -92,9 +92,8 @@ export function HyperspaceWarp() {
       mouseOffsetX += (targetMouseX - mouseOffsetX) * 0.05
       mouseOffsetY += (targetMouseY - mouseOffsetY) * 0.05
 
-      // Xóa màn hình với màu đen thuần `#050505`
-      ctx.fillStyle = '#050505'
-      ctx.fillRect(0, 0, width, height)
+      // Xóa canvas trong suốt để lộ hình nền nghệ thuật cao cấp bên dưới
+      ctx.clearRect(0, 0, width, height)
 
       const isWarping = currentSpeed > BASE_SPEED * 2.5
       const actualCx = cx + mouseOffsetX
