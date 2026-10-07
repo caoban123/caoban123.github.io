@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Github, ExternalLink, Cpu, Database, Network, ShieldCheck, Zap, Layers, Sparkles } from 'lucide-react'
 import { soundFx } from '../../lib/sound'
@@ -119,23 +120,45 @@ const PROJECT_DEEP_DIVES = {
 
 export function ProjectDetailModal({ project, isOpen, onClose }) {
   useEffect(() => {
+    if (!isOpen) return
+
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === 'Escape') {
         soundFx.playClick()
         onClose()
       }
     }
     window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
+
+    // Khóa cuộn trang nền và tạm dừng Lenis để toàn bộ thao tác cuộn nằm trọn trong modal
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    if (window.__lenis) {
+      window.__lenis.stop()
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = prevOverflow
+      if (window.__lenis) {
+        window.__lenis.start()
+      }
+    }
   }, [isOpen, onClose])
 
   if (!project) return null
   const deepDive = PROJECT_DEEP_DIVES[project.id]
 
-  return (
+  if (typeof document === 'undefined') return null
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6"
+          onWheel={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
+        >
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -154,10 +177,10 @@ export function ProjectDetailModal({ project, isOpen, onClose }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative z-10 flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border border-white/[0.12] bg-[#0c0c14]/95 shadow-[0_25px_80px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
+            className="relative z-10 flex max-h-[88vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border border-white/[0.12] bg-[#0c0c14]/95 shadow-[0_25px_80px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-white/[0.08] bg-white/[0.02] px-6 py-5">
+            <div className="flex shrink-0 items-center justify-between border-b border-white/[0.08] bg-white/[0.02] px-6 py-4 sm:py-5">
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="rounded-full border border-accent-cyan/30 bg-accent-cyan/10 px-2.5 py-0.5 font-mono text-[10px] text-accent-cyan font-semibold">
@@ -182,8 +205,12 @@ export function ProjectDetailModal({ project, isOpen, onClose }) {
               </button>
             </div>
 
-            {/* Scrollable Body */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 text-sm">
+            {/* Scrollable Body - Cuộn mượt độc lập bên trong */}
+            <div
+              data-lenis-prevent="true"
+              className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-5 sm:p-6 space-y-6 text-sm [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.2)_transparent]"
+              onWheel={(e) => e.stopPropagation()}
+            >
               {/* Mô tả cốt lõi */}
               <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-4 text-zinc-300 leading-relaxed text-xs sm:text-sm">
                 {project.description}
@@ -257,7 +284,7 @@ export function ProjectDetailModal({ project, isOpen, onClose }) {
             </div>
 
             {/* Footer */}
-            <div className="border-t border-white/[0.08] bg-white/[0.02] px-6 py-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="shrink-0 border-t border-white/[0.08] bg-white/[0.02] px-6 py-3.5 sm:py-4 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 {project.github && (
                   <a
@@ -296,6 +323,7 @@ export function ProjectDetailModal({ project, isOpen, onClose }) {
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   )
 }

@@ -105,10 +105,11 @@ export function Projects() {
 
   useLayoutEffect(() => {
     if (!horizontal) return
+    let ro
     const ctx = gsap.context(() => {
       const track = trackRef.current
       if (!track) return
-      const distance = () => Math.max(0, track.scrollWidth - window.innerWidth)
+      const distance = () => Math.max(0, track.scrollWidth - window.innerWidth + 80)
 
       gsap.to(track, {
         x: () => -distance(),
@@ -128,10 +129,19 @@ export function Projects() {
       })
     }, sectionRef)
 
+    // Tự động làm mới ScrollTrigger khi ảnh/font tải xong để tránh bị khuất các thẻ ở cuối
+    if (typeof ResizeObserver !== 'undefined' && trackRef.current) {
+      ro = new ResizeObserver(() => {
+        ScrollTrigger.refresh()
+      })
+      ro.observe(trackRef.current)
+    }
+
     // Cập nhật lại ScrollTrigger khi đổi tab lọc
     const t = setTimeout(() => ScrollTrigger.refresh(), 100)
     return () => {
       clearTimeout(t)
+      ro?.disconnect()
       ctx.revert()
     }
   }, [horizontal, activeCategory])
@@ -140,7 +150,7 @@ export function Projects() {
     return (
       <div id="projects">
         <section ref={sectionRef} className="relative h-screen overflow-hidden">
-          <div ref={trackRef} className="flex h-full items-center gap-10 pl-[6vw] pr-[8vw] will-change-transform">
+          <div ref={trackRef} className="flex h-full items-center gap-8 pl-[6vw] pr-[14vw] will-change-transform">
             <div className="flex w-[34vw] shrink-0 flex-col justify-center">
               <Heading />
               <p className="mt-6 max-w-sm text-sm text-zinc-400 leading-relaxed">

@@ -3,7 +3,6 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, Github, FileText, Command, Sparkles, ScanEye, Gauge, GraduationCap, Award } from 'lucide-react'
 import { ScrambleText } from '../ui/ScrambleText'
 import { Magnetic } from '../ui/Magnetic'
-import { AcademicModal } from '../ui/AcademicModal'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { scrollToTarget } from '../../lib/scroll'
 import { site } from '../../data/site'
@@ -34,7 +33,6 @@ function handleCardMove(e) {
 
 export function Hero({ ready = true }) {
   const [roleIndex, setRoleIndex] = useState(0)
-  const [academicModal, setAcademicModal] = useState({ open: false, tab: 'all' })
   const reduced = useReducedMotion()
   const spotRef = useRef(null)
   const rafRef = useRef(0)
@@ -146,42 +144,23 @@ export function Hero({ ready = true }) {
           </div>
 
           {/* Huy hiệu GPA 3.88 / 4.0 */}
-          <button
-            onClick={() => {
-              soundFx.playClick()
-              setAcademicModal({ open: true, tab: 'gpa' })
-            }}
-            onMouseEnter={() => soundFx.playHover()}
-            className="group/badge inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/[0.08] px-3.5 py-1.5 font-mono text-xs font-semibold text-amber-300 backdrop-blur-md shadow-[0_0_20px_rgba(245,158,11,0.18)] transition-all hover:scale-105 hover:border-amber-500/60 hover:bg-amber-500/15"
-            title="Nhấn để xem bảng thành tích chi tiết"
+          <div
+            className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/[0.08] px-3.5 py-1.5 font-mono text-xs font-semibold text-amber-300 backdrop-blur-md shadow-[0_0_20px_rgba(245,158,11,0.18)]"
           >
-            <GraduationCap className="h-4 w-4 text-amber-400 transition-transform group-hover/badge:rotate-12" />
+            <GraduationCap className="h-4 w-4 text-amber-400" />
             <span>GPA: <strong className="text-white font-bold">3.88 / 4.0</strong></span>
-            <span className="border-l border-amber-500/30 pl-2 text-[10px] font-normal text-amber-400/90 hidden sm:inline">HCMUS ↗</span>
-          </button>
+            <span className="border-l border-amber-500/30 pl-2 text-[10px] font-normal text-amber-400/90 hidden sm:inline">HCMUS</span>
+          </div>
 
           {/* Huy hiệu TOEIC 900+ */}
-          <button
-            onClick={() => {
-              soundFx.playClick()
-              setAcademicModal({ open: true, tab: 'toeic' })
-            }}
-            onMouseEnter={() => soundFx.playHover()}
-            className="group/badge inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/[0.08] px-3.5 py-1.5 font-mono text-xs font-semibold text-cyan-300 backdrop-blur-md shadow-[0_0_20px_rgba(34,211,238,0.18)] transition-all hover:scale-105 hover:border-cyan-500/60 hover:bg-cyan-500/15"
-            title="Nhấn để xem chứng chỉ ngoại ngữ chi tiết"
+          <div
+            className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/[0.08] px-3.5 py-1.5 font-mono text-xs font-semibold text-cyan-300 backdrop-blur-md shadow-[0_0_20px_rgba(34,211,238,0.18)]"
           >
-            <Award className="h-4 w-4 text-cyan-400 transition-transform group-hover/badge:rotate-12" />
+            <Award className="h-4 w-4 text-cyan-400" />
             <span>TOEIC: <strong className="text-white font-bold">900+</strong></span>
-            <span className="border-l border-cyan-500/30 pl-2 text-[10px] font-normal text-cyan-400/90 hidden sm:inline">Thành thạo QT ↗</span>
-          </button>
+            <span className="border-l border-cyan-500/30 pl-2 text-[10px] font-normal text-cyan-400/90 hidden sm:inline">Thành thạo QT</span>
+          </div>
         </motion.div>
-
-        {/* Modal chi tiết thành tích học thuật */}
-        <AcademicModal
-          isOpen={academicModal.open}
-          onClose={() => setAcademicModal((prev) => ({ ...prev, open: false }))}
-          initialTab={academicModal.tab}
-        />
 
         {/* Tên — hiện dần từ mờ sang nét, giữ trọn dấu tiếng Việt */}
         <h1 className="mb-6 font-display text-5xl font-extrabold leading-[1.2] tracking-tight sm:text-7xl md:text-8xl lg:text-9xl">
