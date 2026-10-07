@@ -6,9 +6,9 @@ const SOURCE = [-0.66, 0]
 const TARGET = [0.64, 0]
 const COLORS = ['#4F7CFF', '#8B5CF6', '#22D3EE']
 const CYCLE_MS = 3800
-const TRAVEL = 0.7 // fraction of the cycle spent moving
+const TRAVEL = 0.7 // tỷ lệ chu kỳ di chuyển
 
-// Seeded RNG so the illustration is identical on every visit.
+// Seeded RNG
 function mulberry32(seed) {
   return () => {
     seed |= 0
@@ -32,7 +32,7 @@ function buildDataset() {
   for (let i = 0; i < N; i++) {
     x0.push([SOURCE[0] + gauss() * 0.13, SOURCE[1] + gauss() * 0.13])
 
-    // Two moons, rotated to stand vertically.
+    // Two moons
     const a = rand() * Math.PI
     let mx, my
     if (i % 2 === 0) {
@@ -47,7 +47,6 @@ function buildDataset() {
     x1.push([TARGET[0] + my, TARGET[1] + mx])
   }
 
-  // Random pairing (independent coupling) vs. a sorted, non-crossing pairing (straightened coupling).
   const randomPair = x0.map((_, i) => i).sort(() => rand() - 0.5)
   const byY = (arr) => arr.map((p, i) => [p[1], i]).sort((a, b) => a[0] - b[0]).map((e) => e[1])
   const src = byY(x0)
@@ -55,17 +54,11 @@ function buildDataset() {
   const straightPair = new Array(N)
   src.forEach((si, k) => (straightPair[si] = tgt[k]))
 
-  // Per-particle curvature for the "diffusion-style" paths.
   const bend = x0.map(() => (rand() * 2 - 1) * 0.42)
 
   return { x0, x1, randomPair, straightPair, bend }
 }
 
-/**
- * Euler-integrate each particle with `steps` steps.
- * Curved path:  x(t) = (1-t)x0 + t·x1 + sin(πt)·c   → v(t) = x1 - x0 + π·cos(πt)·c
- * Straight path: c = 0                              → v constant, Euler is exact.
- */
 function integrate(data, mode, steps) {
   const { x0, x1, randomPair, straightPair, bend } = data
   const curved = mode === 'diffusion'
@@ -119,7 +112,6 @@ export function FlowSimulation() {
   simRef.current = sim
   const startRef = useRef(performance.now())
 
-  // Restart the animation whenever the parameters change.
   useEffect(() => {
     startRef.current = performance.now()
   }, [mode, steps])
@@ -159,12 +151,12 @@ export function FlowSimulation() {
 
       ctx.clearRect(0, 0, W, H)
 
-      // Target distribution ghost.
+      // Phân phối dữ liệu đích (Ghost points)
       ctx.fillStyle = 'rgba(255,255,255,0.13)'
       for (const p of data.x1) ctx.fillRect(X(p[0]) - 1, Y(p[1]) - 1, 2, 2)
 
-      // Trajectories (Euler polylines).
-      ctx.strokeStyle = 'rgba(120,140,255,0.07)'
+      // Đường quỹ đạo Euler
+      ctx.strokeStyle = 'rgba(120,140,255,0.08)'
       ctx.lineWidth = 1
       ctx.beginPath()
       for (const pts of paths) {
@@ -173,7 +165,7 @@ export function FlowSimulation() {
       }
       ctx.stroke()
 
-      // Particles, batched by color.
+      // Các hạt di chuyển
       ctx.globalCompositeOperation = 'lighter'
       const f = t * stepsN
       const k = Math.min(stepsN - 1, Math.floor(f))
@@ -193,12 +185,12 @@ export function FlowSimulation() {
       }
       ctx.globalCompositeOperation = 'source-over'
 
-      // Labels.
-      ctx.fillStyle = 'rgba(161,161,170,0.8)'
-      ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, monospace'
+      // Nhãn phân phối
+      ctx.fillStyle = 'rgba(161,161,170,0.85)'
+      ctx.font = '11px "JetBrains Mono", monospace'
       ctx.textAlign = 'center'
-      ctx.fillText('x₀ ~ N(0, I)', X(SOURCE[0]), Y(-0.53))
-      ctx.fillText('x₁ ~ p_data', X(TARGET[0]), Y(-0.53))
+      ctx.fillText('x₀ ~ N(0, I) [Nhiễu]', X(SOURCE[0]), Y(-0.53))
+      ctx.fillText('x₁ ~ p_data [Dữ liệu]', X(TARGET[0]), Y(-0.53))
     }
 
     const loop = (now) => {
@@ -229,20 +221,24 @@ export function FlowSimulation() {
     <div ref={wrapRef} className="overflow-hidden rounded-3xl border border-white/[0.08] bg-[#08080d]">
       <div className="flex flex-col gap-4 border-b border-white/[0.06] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <div>
-          <div className="font-mono text-[11px] uppercase tracking-[0.25em] text-accent-cyan">Interactive · Noise → Data</div>
-          <div className="mt-1 text-sm text-zinc-400">Why straight trajectories need fewer sampling steps.</div>
+          <div className="font-mono text-[11px] uppercase tracking-[0.25em] text-accent-cyan font-semibold">
+            Mô phỏng tương tác · Nhiễu → Dữ liệu
+          </div>
+          <div className="mt-1 text-sm text-zinc-400">
+            Trực quan hóa lý do tại sao quỹ đạo thẳng cần ít bước lấy mẫu (NFE) hơn.
+          </div>
         </div>
 
         <div className="inline-flex rounded-full border border-white/[0.08] bg-white/[0.03] p-1 font-mono text-xs">
           {[
-            ['diffusion', 'Curved (diffusion-style)'],
-            ['rectified', 'Straight (rectified flow)'],
+            ['diffusion', 'Quỹ đạo cong (Diffusion)'],
+            ['rectified', 'Quỹ đạo thẳng (Rectified Flow)'],
           ].map(([key, label]) => (
             <button
               key={key}
               onClick={() => setMode(key)}
               className={`rounded-full px-3.5 py-1.5 transition-colors ${
-                mode === key ? 'bg-white text-black' : 'text-zinc-400 hover:text-white'
+                mode === key ? 'bg-white text-black font-semibold' : 'text-zinc-400 hover:text-white'
               }`}
             >
               {label}
@@ -251,13 +247,13 @@ export function FlowSimulation() {
         </div>
       </div>
 
-      <canvas ref={canvasRef} className="block h-[300px] w-full sm:h-[380px]" aria-label="Particle flow simulation from Gaussian noise to a two-moons distribution" role="img" />
+      <canvas ref={canvasRef} className="block h-[300px] w-full sm:h-[380px]" aria-label="Mô phỏng dòng chảy hạt từ nhiễu Gauss đến dữ liệu two-moons" role="img" />
 
       <div className="grid grid-cols-1 gap-5 border-t border-white/[0.06] p-5 sm:grid-cols-3 sm:p-6">
         <label className="sm:col-span-2">
           <div className="mb-2 flex justify-between font-mono text-xs text-zinc-400">
-            <span>Euler steps (NFE)</span>
-            <span className="text-white">{steps}</span>
+            <span>Số bước Euler (NFE)</span>
+            <span className="text-white font-bold">{steps}</span>
           </div>
           <input
             type="range"
@@ -265,18 +261,20 @@ export function FlowSimulation() {
             max="40"
             value={steps}
             onChange={(e) => setSteps(Number(e.target.value))}
-            className="flow-range w-full"
+            className="flow-range w-full cursor-pointer"
           />
         </label>
         <div className="flex items-end justify-between gap-4 font-mono text-xs sm:flex-col sm:items-end sm:justify-end">
-          <span className="text-zinc-500">Mean endpoint error</span>
-          <span className={`text-lg ${sim.error < 0.01 ? 'text-accent-cyan' : 'text-accent-purple'}`}>{sim.error.toFixed(3)}</span>
+          <span className="text-zinc-500">Sai số điểm cuối (Endpoint error)</span>
+          <span className={`text-lg font-bold ${sim.error < 0.01 ? 'text-accent-cyan' : 'text-accent-purple'}`}>
+            {sim.error.toFixed(3)}
+          </span>
         </div>
       </div>
 
       <p className="px-5 pb-5 text-xs leading-relaxed text-zinc-500 sm:px-6">
-        Illustration, not a trained model. Curved paths drift off-target when integrated with few Euler steps (error ∝ 1/N);
-        straight paths land exactly even with a single step — the core idea behind rectified flow.
+        Minh họa trực quan mang tính phương pháp luận. Quỹ đạo cong bị lệch khỏi phân phối đích khi lấy mẫu với ít bước Euler (sai số ∝ 1/N);
+        trong khi quỹ đạo thẳng đạt độ chính xác cao ngay cả với 1 bước — nguyên lý cốt lõi của Rectified Flow.
       </p>
     </div>
   )

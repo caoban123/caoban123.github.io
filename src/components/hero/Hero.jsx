@@ -9,6 +9,7 @@ import { site } from '../../data/site'
 
 const HeroCanvas = lazy(() => import('./HeroCanvas'))
 
+// Giữ nguyên các thuật ngữ định danh chuyên ngành
 const roles = ['AI Developer', 'Machine Learning Engineer', 'RAG & LLM Builder', 'AI Researcher']
 const ease = [0.16, 1, 0.3, 1]
 
@@ -38,11 +39,11 @@ export function Hero({ ready = true }) {
 
   return (
     <section id="home" className="relative flex min-h-screen flex-col justify-center overflow-hidden pb-12 pt-24">
-      {/* Grid background */}
+      {/* Lưới nền tinh tế */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
 
       <div className="relative mx-auto my-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-12">
-        {/* 3D visual — behind the text on mobile, right column on desktop */}
+        {/* 3D Visual Shader Orb */}
         <motion.div
           initial={{ opacity: 0, scale: 0.92 }}
           animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.92 }}
@@ -58,21 +59,31 @@ export function Hero({ ready = true }) {
           )}
         </motion.div>
 
-        {/* Text */}
+        {/* Nội dung bên trái */}
         <div className="relative z-10 flex flex-col justify-center lg:order-1 lg:col-span-7">
           <motion.div variants={fadeUp(0)} initial="hidden" animate={show} className="mb-4 flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan" />
-            <span className="font-mono text-xs uppercase tracking-[0.25em] text-accent-cyan/90">Hello, I'm</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan shadow-[0_0_8px_#22D3EE]" />
+            <span className="font-mono text-xs uppercase tracking-[0.25em] text-accent-cyan/90">
+              XIN CHÀO, TÔI LÀ
+            </span>
           </motion.div>
 
-          <h1 className="mb-5 font-display text-5xl font-black uppercase leading-[0.95] tracking-tight text-white sm:text-7xl lg:text-8xl">
+          {/* Tiêu đề tên người dùng — ĐÃ FIX LỖI CHE DẤU TIẾNG VIỆT */}
+          <h1 className="mb-6 font-display text-5xl font-black uppercase tracking-tight text-white sm:text-7xl lg:text-8xl">
             {['NGUYỄN', 'CAO BẢN'].map((line, i) => (
-              <span key={line} className="block overflow-hidden pb-1">
+              <span
+                key={line}
+                className="block overflow-hidden pt-3 sm:pt-4 pb-2 sm:pb-3 -mt-2 sm:-mt-3"
+              >
                 <motion.span
-                  className={`block ${i === 1 ? 'bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan bg-clip-text text-transparent' : ''}`}
-                  initial={{ y: '110%' }}
-                  animate={{ y: ready ? '0%' : '110%' }}
-                  transition={{ duration: 1, delay: 0.1 + i * 0.12, ease }}
+                  className={`inline-block leading-[1.15] py-0.5 ${
+                    i === 1
+                      ? 'bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan bg-clip-text text-transparent pb-1'
+                      : 'text-white'
+                  }`}
+                  initial={{ y: '130%' }}
+                  animate={{ y: ready ? '0%' : '130%' }}
+                  transition={{ duration: 1, delay: 0.1 + i * 0.14, ease }}
                 >
                   {line}
                 </motion.span>
@@ -80,17 +91,35 @@ export function Hero({ ready = true }) {
             ))}
           </h1>
 
-          <motion.div variants={fadeUp(0.35)} initial="hidden" animate={show} className="mb-6 flex h-9 items-center font-mono text-lg font-semibold text-zinc-300 sm:text-2xl">
+          {/* Dynamic Role Switcher — Giữ nguyên thuật ngữ kỹ thuật */}
+          <motion.div
+            variants={fadeUp(0.35)}
+            initial="hidden"
+            animate={show}
+            className="mb-6 flex h-9 items-center font-mono text-lg font-semibold text-zinc-300 sm:text-2xl"
+          >
             <span className="mr-2 text-accent-blue">&gt;</span>
             <ScrambleText text={roles[roleIndex]} play={ready} duration={650} />
             <span className="ml-1 inline-block h-6 w-[2px] animate-pulse bg-accent-cyan" />
           </motion.div>
 
-          <motion.p variants={fadeUp(0.45)} initial="hidden" animate={show} className="mb-9 max-w-xl text-base leading-relaxed text-zinc-400 sm:text-lg">
-            I build intelligent systems that combine AI models, retrieval systems, computer vision, and reliable software engineering.
+          {/* Mô tả ngắn tiếng Việt */}
+          <motion.p
+            variants={fadeUp(0.45)}
+            initial="hidden"
+            animate={show}
+            className="mb-9 max-w-xl text-base leading-relaxed text-zinc-400 sm:text-lg"
+          >
+            Tôi xây dựng các hệ thống thông minh kết hợp giữa các mô hình AI, hệ thống truy xuất (RAG), Computer Vision và kỹ thuật phần mềm tin cậy.
           </motion.p>
 
-          <motion.div variants={fadeUp(0.55)} initial="hidden" animate={show} className="flex flex-wrap items-center gap-3">
+          {/* Nút hành động */}
+          <motion.div
+            variants={fadeUp(0.55)}
+            initial="hidden"
+            animate={show}
+            className="flex flex-wrap items-center gap-3.5"
+          >
             <Magnetic>
               <a
                 href="#projects"
@@ -98,10 +127,10 @@ export function Hero({ ready = true }) {
                   e.preventDefault()
                   scrollToTarget('#projects')
                 }}
-                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-accent-blue to-accent-purple px-6 py-3.5 text-sm font-medium text-white shadow-[0_0_30px_rgba(79,124,255,0.35)]"
+                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-accent-blue to-accent-purple px-6 py-3.5 text-sm font-semibold text-white shadow-[0_0_30px_rgba(79,124,255,0.35)]"
               >
                 <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                <span className="relative">Explore My Work</span>
+                <span className="relative">Khám phá dự án</span>
                 <ArrowRight className="relative h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
             </Magnetic>
@@ -111,7 +140,7 @@ export function Hero({ ready = true }) {
                 href={site.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.05] px-6 py-3.5 text-sm font-medium text-zinc-200 transition-colors hover:bg-white/[0.1]"
+                className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.05] px-6 py-3.5 text-sm font-medium text-zinc-200 transition-colors hover:bg-white/[0.1] hover:border-white/25"
               >
                 <Github className="h-4 w-4" />
                 GitHub
@@ -126,7 +155,7 @@ export function Hero({ ready = true }) {
                   className="inline-flex items-center gap-2 rounded-full px-5 py-3.5 text-sm font-medium text-zinc-400 transition-colors hover:text-white"
                 >
                   <FileText className="h-4 w-4" />
-                  Download CV
+                  Tải CV
                 </a>
               </Magnetic>
             )}
@@ -134,7 +163,7 @@ export function Hero({ ready = true }) {
         </div>
       </div>
 
-      {/* Bottom bar: command palette hint + scroll indicator */}
+      {/* Thanh chân Hero: Bảng lệnh & Cuộn trang */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: ready ? 1 : 0 }}
@@ -146,11 +175,11 @@ export function Hero({ ready = true }) {
           className="hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500 transition-colors hover:text-zinc-300 md:flex"
         >
           <Command className="h-3.5 w-3.5" />
-          Press <kbd className="rounded border border-white/15 px-1.5 py-0.5 text-zinc-300">Ctrl K</kbd> to navigate
+          Nhấn <kbd className="rounded border border-white/15 px-1.5 py-0.5 text-zinc-300">Ctrl K</kbd> để mở bảng lệnh
         </button>
 
         <div className="pointer-events-none flex flex-col items-center gap-2 md:absolute md:left-1/2 md:-translate-x-1/2">
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">Scroll to explore</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">Cuộn để khám phá</span>
           <span className="relative block h-10 w-px overflow-hidden bg-white/10">
             <span className="scroll-line absolute inset-0 bg-gradient-to-b from-accent-blue to-accent-cyan" />
           </span>

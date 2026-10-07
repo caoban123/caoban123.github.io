@@ -1,12 +1,12 @@
-// Global personal info — single source of truth for links used across the site.
-// Leave a field as '' to hide every button that depends on it.
+// Thông tin cá nhân toàn trang — nguồn dữ liệu duy nhất cho các liên kết
 export const site = {
   name: 'Nguyễn Cao Bản',
-  shortName: 'NGUYEN CAO BAN',
-  location: 'Ho Chi Minh City, Vietnam',
+  shortName: 'NGUYỄN CAO BẢN',
+  location: 'TP. Hồ Chí Minh, Việt Nam',
   timezone: 'Asia/Ho_Chi_Minh',
   github: 'https://github.com/caoban123',
-  linkedin: '', // TODO: real LinkedIn URL
-  email: '', // TODO: real email address
-  cv: '', // TODO: e.g. '/cv/Nguyen-Cao-Ban-CV.pdf' (put the file in public/cv/)
+  linkedin: 'https://www.linkedin.com/in/caoban123',
+  facebook: 'https://www.facebook.com/nguyen.ban.591323/about',
+  email: 'contact.caoban@gmail.com', // Email liên hệ
+  cv: '', // Sẽ hiển thị khi có file đặt tại public/cv/
 }

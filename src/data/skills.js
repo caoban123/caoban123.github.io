@@ -1,24 +1,24 @@
-// Skill groups from PORTFOLIO_DESIGN.md §21. No percentages by design.
+// Danh mục kỹ năng phân nhóm theo lĩnh vực thực tế — không dùng % ảo
 export const skillCategories = [
   {
     category: 'AI / Machine Learning',
     skills: ['Python', 'PyTorch', 'Scikit-learn', 'NumPy', 'Pandas', 'YOLO', 'CNN', 'CLIP', 'SigLIP'],
   },
   {
-    category: 'LLM / RAG',
-    skills: ['LangChain', 'LangGraph', 'RAG', 'Qdrant', 'ChromaDB', 'FAISS', 'BM25', 'Gemini API', 'OpenAI API'],
+    category: 'LLM / RAG & Agentic Systems',
+    skills: ['LangChain', 'LangGraph', 'RAG Architecture', 'Qdrant', 'ChromaDB', 'FAISS', 'BM25', 'Gemini API', 'OpenAI API'],
   },
   {
-    category: 'Backend',
-    skills: ['FastAPI', 'REST API', 'Firebase', 'SQL'],
+    category: 'Backend & Hệ thống',
+    skills: ['FastAPI', 'RESTful API', 'Firebase', 'SQL', 'PostgreSQL'],
   },
   {
-    category: 'Frontend',
-    skills: ['React', 'JavaScript', 'Tailwind CSS', 'HTML/CSS'],
+    category: 'Frontend & Giao diện tương tác',
+    skills: ['React', 'JavaScript (ES6+)', 'Tailwind CSS', 'Three.js / WebGL', 'HTML5 / CSS3'],
   },
   {
-    category: 'Tools / Deployment',
-    skills: ['Git', 'GitHub', 'Docker', 'Coolify', 'Cloudflare', 'WSL', 'Linux'],
+    category: 'Công cụ & Hạ tầng triển khai',
+    skills: ['Git & GitHub', 'Docker', 'Coolify', 'Cloudflare', 'Linux / WSL', 'CI/CD Workflows'],
   },
 ]
 

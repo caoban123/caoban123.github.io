@@ -15,13 +15,15 @@ function Heading() {
   return (
     <>
       <div className="mb-3 flex items-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan" />
-        <span className="font-mono text-xs uppercase tracking-[0.25em] text-accent-cyan">02 // Portfolio</span>
+        <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan shadow-[0_0_8px_#22D3EE]" />
+        <span className="font-mono text-xs uppercase tracking-[0.25em] text-accent-cyan">
+          02 // DỰ ÁN THỰC CHIẾN
+        </span>
       </div>
-      <h2 className="font-display text-5xl font-black uppercase leading-[0.95] tracking-tight text-white sm:text-7xl">
-        Selected <br />
+      <h2 className="font-display text-5xl font-black uppercase leading-[1.12] tracking-tight text-white sm:text-7xl">
+        DỰ ÁN <br />
         <span className="bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan bg-clip-text text-transparent">
-          Projects
+          TIÊU BIỂU
         </span>
       </h2>
     </>
@@ -34,10 +36,10 @@ function MoreOnGithub({ className = '' }) {
       href={site.github}
       target="_blank"
       rel="noopener noreferrer"
-      data-cursor="OPEN"
+      data-cursor="MỞ"
       className={`group flex shrink-0 flex-col justify-center gap-4 ${className}`}
     >
-      <span className="font-mono text-xs uppercase tracking-[0.25em] text-zinc-500">More work</span>
+      <span className="font-mono text-xs uppercase tracking-[0.25em] text-zinc-500">Xem thêm mã nguồn</span>
       <span className="flex items-center gap-3 font-display text-4xl font-bold text-white transition-colors group-hover:text-accent-cyan">
         GitHub <ArrowUpRight className="h-8 w-8 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
       </span>
@@ -87,11 +89,11 @@ export function Projects() {
           <div ref={trackRef} className="flex h-full items-center gap-10 pl-[6vw] pr-[8vw] will-change-transform">
             <div className="flex w-[34vw] shrink-0 flex-col justify-center">
               <Heading />
-              <p className="mt-8 max-w-sm text-sm text-zinc-400">
-                Real systems across retrieval, computer vision and AI agents. Keep scrolling — the track moves sideways.
+              <p className="mt-8 max-w-sm text-sm text-zinc-400 leading-relaxed">
+                Các hệ thống thực tế từ truy xuất dữ liệu, Computer Vision đến AI agents. Tiếp tục cuộn chuột — khung dự án sẽ trượt ngang.
               </p>
               <span className="mt-8 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
-                Scroll <ArrowRight className="h-3.5 w-3.5 animate-pulse" />
+                Cuộn ngang <ArrowRight className="h-3.5 w-3.5 animate-pulse text-accent-cyan" />
               </span>
             </div>
 
@@ -102,7 +104,7 @@ export function Projects() {
             <MoreOnGithub className="w-[22vw] pl-6" />
           </div>
 
-          {/* Progress */}
+          {/* Thanh tiến trình cuộn */}
           <div className="absolute bottom-10 left-[6vw] right-[6vw] h-px bg-white/10">
             <div
               ref={progressRef}
@@ -114,7 +116,7 @@ export function Projects() {
     )
   }
 
-  // Mobile / reduced-motion: plain vertical list.
+  // Chế độ dọc cho Mobile hoặc Reduced-motion
   return (
     <section id="projects" className="relative py-28">
       <div className="mx-auto max-w-7xl px-6">

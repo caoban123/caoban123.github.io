@@ -6,13 +6,13 @@ import { site } from '../../data/site'
 const COUNT_DURATION = 1500
 const NAME_HOLD = 1100
 
-/** Cinematic intro: 0→100 counter, then the name decodes, then the curtain lifts. */
+/** Màn hình mở đầu điện ảnh: Bộ đếm 0→100%, giải mã tên tiếng Việt, mở màn hình chính */
 export function Preloader({ onComplete }) {
   const [count, setCount] = useState(0)
   const [phase, setPhase] = useState('count') // 'count' | 'name'
 
   useEffect(() => {
-    // Warm up the heavy 3D chunk while the intro plays.
+    // Tải trước bundle 3D HeroCanvas
     import('../hero/HeroCanvas')
 
     let raf
@@ -41,7 +41,7 @@ export function Preloader({ onComplete }) {
       transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
     >
       <div className="flex items-start justify-between font-mono text-[11px] uppercase tracking-[0.25em] text-zinc-500">
-        <span>Loading portfolio</span>
+        <span>Đang khởi tạo hệ thống...</span>
         <span>NCB — {new Date().getFullYear()}</span>
       </div>
 
@@ -51,15 +51,17 @@ export function Preloader({ onComplete }) {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center"
+              className="text-center px-4"
             >
-              <ScrambleText
-                text={site.name.toUpperCase()}
-                duration={750}
-                className="block font-display text-4xl font-black tracking-tight text-white sm:text-7xl"
-              />
+              <div className="py-2">
+                <ScrambleText
+                  text={site.name.toUpperCase()}
+                  duration={750}
+                  className="block font-display text-4xl font-black tracking-tight text-white sm:text-7xl leading-snug"
+                />
+              </div>
               <div className="mt-4 font-mono text-[11px] uppercase tracking-[0.35em] text-accent-cyan">
-                AI · RAG · Vision · Research
+                AI · RAG · Computer Vision · Nghiên cứu
               </div>
             </motion.div>
           )}

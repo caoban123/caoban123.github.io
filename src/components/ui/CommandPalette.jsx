@@ -1,29 +1,29 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Github, Linkedin, Mail, ArrowUp, Hash, CornerDownLeft, Terminal } from 'lucide-react'
+import { Search, Github, Linkedin, Facebook, Mail, ArrowUp, Hash, CornerDownLeft, Terminal } from 'lucide-react'
 import { scrollToTarget } from '../../lib/scroll'
 import { site } from '../../data/site'
 import { projects } from '../../data/projects'
 
 const SECTIONS = [
-  { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'research', label: 'Research' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'contact', label: 'Contact' },
+  { id: 'home', label: 'Trang chủ' },
+  { id: 'about', label: 'Giới thiệu' },
+  { id: 'projects', label: 'Dự án' },
+  { id: 'research', label: 'Nghiên cứu' },
+  { id: 'skills', label: 'Kỹ năng' },
+  { id: 'contact', label: 'Liên hệ' },
 ]
 
 const HELP = [
-  'help              list commands',
-  'whoami            who is this?',
-  'ls [projects]     list sections or projects',
-  'cd <section>      jump to a section',
-  'open github' + (site.linkedin ? '|linkedin' : ''),
-  'clear             clear the terminal',
+  'help              hiển thị danh sách câu lệnh',
+  'whoami            thông tin tác giả',
+  'ls [projects]     danh sách mục hoặc danh sách dự án',
+  'cd <mục>          chuyển nhanh đến một phần trong trang',
+  'open github|linkedin|facebook',
+  'clear             xóa trắng màn hình terminal',
 ]
 
-// Subsequence fuzzy match: "prj" matches "Go to Projects".
+// Tìm kiếm mờ (fuzzy search)
 function fuzzy(text, query) {
   const t = text.toLowerCase()
   let j = 0
@@ -53,16 +53,49 @@ export function CommandPalette() {
       [
         ...SECTIONS.map((s) => ({
           id: `go-${s.id}`,
-          group: 'Navigate',
-          label: `Go to ${s.label}`,
+          group: 'Điều hướng',
+          label: `Đến ${s.label}`,
           hint: `#${s.id}`,
           icon: Hash,
           run: () => scrollToTarget(`#${s.id}`),
         })),
-        { id: 'github', group: 'Links', label: 'Open GitHub', hint: 'caoban123', icon: Github, run: () => window.open(site.github, '_blank', 'noopener') },
-        site.linkedin && { id: 'linkedin', group: 'Links', label: 'Open LinkedIn', icon: Linkedin, run: () => window.open(site.linkedin, '_blank', 'noopener') },
-        site.email && { id: 'email', group: 'Actions', label: 'Copy email address', hint: site.email, icon: Mail, run: () => navigator.clipboard?.writeText(site.email) },
-        { id: 'top', group: 'Actions', label: 'Back to top', icon: ArrowUp, run: () => scrollToTarget('#home') },
+        {
+          id: 'github',
+          group: 'Liên kết',
+          label: 'Mở GitHub',
+          hint: 'caoban123',
+          icon: Github,
+          run: () => window.open(site.github, '_blank', 'noopener'),
+        },
+        site.linkedin && {
+          id: 'linkedin',
+          group: 'Liên kết',
+          label: 'Mở LinkedIn',
+          icon: Linkedin,
+          run: () => window.open(site.linkedin, '_blank', 'noopener'),
+        },
+        site.facebook && {
+          id: 'facebook',
+          group: 'Liên kết',
+          label: 'Mở Facebook',
+          icon: Facebook,
+          run: () => window.open(site.facebook, '_blank', 'noopener'),
+        },
+        site.email && {
+          id: 'email',
+          group: 'Thao tác',
+          label: 'Sao chép địa chỉ Email',
+          hint: site.email,
+          icon: Mail,
+          run: () => navigator.clipboard?.writeText(site.email),
+        },
+        {
+          id: 'top',
+          group: 'Thao tác',
+          label: 'Cuộn về đầu trang',
+          icon: ArrowUp,
+          run: () => scrollToTarget('#home'),
+        },
       ].filter(Boolean),
     []
   )
@@ -70,7 +103,7 @@ export function CommandPalette() {
   const isTerminal = query.startsWith('>')
   const filtered = isTerminal ? [] : commands.filter((c) => fuzzy(c.label, query))
 
-  // Global shortcuts.
+  // Phím tắt toàn cục
   useEffect(() => {
     const onKey = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
@@ -119,7 +152,7 @@ export function CommandPalette() {
         print(...HELP)
         break
       case 'whoami':
-        print(`${site.name} — AI Developer · RAG & LLM · Computer Vision · Research`)
+        print(`${site.name} — AI Developer · RAG & LLM · Computer Vision · AI Researcher`)
         break
       case 'ls':
         if (arg === 'projects') print(...projects.map((p, i) => `${String(i + 1).padStart(2, '0')}  ${p.title}`))
@@ -130,26 +163,27 @@ export function CommandPalette() {
         if (target) {
           close()
           scrollToTarget(`#${target.id}`)
-        } else print(`cd: no such section: ${arg || '(empty)'}`)
+        } else print(`cd: không tìm thấy mục: ${arg || '(trống)'}`)
         break
       }
       case 'open':
         if (arg === 'github') window.open(site.github, '_blank', 'noopener')
         else if (arg === 'linkedin' && site.linkedin) window.open(site.linkedin, '_blank', 'noopener')
-        else print(`open: unknown target: ${arg || '(empty)'}`)
+        else if (arg === 'facebook' && site.facebook) window.open(site.facebook, '_blank', 'noopener')
+        else print(`open: mục tiêu không hợp lệ: ${arg || '(trống)'}`)
         break
       case 'clear':
         setLines([])
         break
       case 'sudo':
-        print('Nice try. Permission granted anyway — redirecting to contact…')
+        print('Quyền truy cập hợp lệ — chuyển hướng đến mục liên hệ…')
         setTimeout(() => {
           close()
           scrollToTarget('#contact')
         }, 900)
         break
       default:
-        print(`command not found: ${cmd}. Type 'help'.`)
+        print(`Lệnh không tồn tại: ${cmd}. Nhập 'help' để xem danh sách lệnh.`)
     }
     setQuery('>')
   }
@@ -187,7 +221,7 @@ export function CommandPalette() {
         >
           <motion.div
             role="dialog"
-            aria-label="Command palette"
+            aria-label="Bảng lệnh"
             initial={{ opacity: 0, y: -12, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
@@ -202,7 +236,7 @@ export function CommandPalette() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={onInputKey}
-                placeholder="Search or type > for terminal…"
+                placeholder="Tìm kiếm hoặc gõ > để mở terminal…"
                 className="h-14 flex-1 bg-transparent font-mono text-sm text-white placeholder:text-zinc-600 focus:outline-none"
                 spellCheck={false}
                 autoComplete="off"
@@ -214,7 +248,7 @@ export function CommandPalette() {
               {(isTerminal || lines.length > 0) && (
                 <div className="mb-2 rounded-xl bg-black/40 p-3 font-mono text-xs leading-relaxed">
                   {lines.length === 0 ? (
-                    <div className="text-zinc-500">Type 'help' and press Enter.</div>
+                    <div className="text-zinc-500">Gõ 'help' và nhấn Enter.</div>
                   ) : (
                     lines.map((l, i) => (
                       <div key={i} className={`whitespace-pre-wrap ${l.startsWith('$') ? 'text-accent-cyan' : 'text-zinc-300'}`}>
@@ -231,7 +265,7 @@ export function CommandPalette() {
                 const Icon = c.icon
                 return (
                   <React.Fragment key={c.id}>
-                    {header && <div className="px-3 pb-1 pt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-600">{header}</div>}
+                    {header && <div className="px-3 pb-1 pt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-600 font-semibold">{header}</div>}
                     <button
                       onMouseEnter={() => setActive(i)}
                       onClick={() => {
@@ -243,7 +277,7 @@ export function CommandPalette() {
                       }`}
                     >
                       <Icon className="h-4 w-4 shrink-0" />
-                      <span className="flex-1">{c.label}</span>
+                      <span className="flex-1 font-medium">{c.label}</span>
                       {c.hint && <span className="font-mono text-[11px] text-zinc-600">{c.hint}</span>}
                       {i === active && <CornerDownLeft className="h-3.5 w-3.5 text-zinc-500" />}
                     </button>
@@ -252,13 +286,13 @@ export function CommandPalette() {
               })}
 
               {!isTerminal && filtered.length === 0 && (
-                <div className="px-3 py-6 text-center font-mono text-xs text-zinc-500">No results — press Enter to run it as a terminal command.</div>
+                <div className="px-3 py-6 text-center font-mono text-xs text-zinc-500">Không tìm thấy kết quả — nhấn Enter để thực thi lệnh terminal.</div>
               )}
             </div>
 
             <div className="flex items-center justify-between border-t border-white/[0.06] px-4 py-2.5 font-mono text-[10px] text-zinc-600">
-              <span>↑↓ navigate · ↵ select</span>
-              <span>&gt; terminal mode</span>
+              <span>↑↓ điều hướng · ↵ chọn</span>
+              <span>&gt; chế độ terminal</span>
             </div>
           </motion.div>
         </motion.div>

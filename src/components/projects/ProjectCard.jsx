@@ -13,11 +13,11 @@ export function ProjectCard({ project, index, total, horizontal = false }) {
       }`}
     >
       <div className={`grid h-full grid-cols-1 gap-8 p-6 sm:p-10 ${horizontal ? 'grid-cols-2' : 'lg:grid-cols-2'}`}>
-        {/* Text */}
+        {/* Cột thông tin */}
         <div className="flex flex-col justify-between">
           <div>
             <div className="mb-6 flex items-center gap-3 font-mono text-xs tracking-widest">
-              <span className="font-bold text-accent-cyan">PROJECT {String(index + 1).padStart(2, '0')}</span>
+              <span className="font-bold text-accent-cyan">DỰ ÁN {String(index + 1).padStart(2, '0')}</span>
               <span className="h-px w-8 bg-zinc-700" />
               <span className="text-zinc-600">/ {String(total).padStart(2, '0')}</span>
             </div>
@@ -25,7 +25,7 @@ export function ProjectCard({ project, index, total, horizontal = false }) {
             <h3 className="mb-3 font-display text-3xl font-bold leading-tight text-white transition-transform duration-500 group-hover:translate-x-1 sm:text-4xl">
               {project.title}
             </h3>
-            <p className="mb-5 text-sm font-medium text-accent-purple">{project.subtitle}</p>
+            <p className="mb-5 text-sm font-medium text-accent-purple leading-snug">{project.subtitle}</p>
             <p className="max-w-md text-sm leading-relaxed text-zinc-400 sm:text-base">{project.description}</p>
           </div>
 
@@ -51,7 +51,7 @@ export function ProjectCard({ project, index, total, horizontal = false }) {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] px-4 py-2 font-mono text-xs uppercase tracking-wider text-zinc-300 transition-colors hover:border-white/30 hover:text-white"
                   >
-                    <Github className="h-4 w-4" /> GitHub
+                    <Github className="h-4 w-4" /> Mã nguồn
                   </a>
                 </Magnetic>
               )}
@@ -63,7 +63,7 @@ export function ProjectCard({ project, index, total, horizontal = false }) {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 font-mono text-xs uppercase tracking-wider text-black transition-colors hover:bg-zinc-200"
                   >
-                    <ExternalLink className="h-4 w-4" /> Live Demo
+                    <ExternalLink className="h-4 w-4" /> Bản chạy thử
                   </a>
                 </Magnetic>
               )}
@@ -71,13 +71,13 @@ export function ProjectCard({ project, index, total, horizontal = false }) {
           </div>
         </div>
 
-        {/* Visual */}
+        {/* Cột đồ họa / Mockup */}
         <a
           href={link}
           target="_blank"
           rel="noopener noreferrer"
-          data-cursor="VIEW"
-          aria-label={`View ${project.title}`}
+          data-cursor="XEM"
+          aria-label={`Xem dự án ${project.title}`}
           className={`block ${horizontal ? 'h-full' : 'aspect-[4/3]'}`}
         >
           {project.image ? (

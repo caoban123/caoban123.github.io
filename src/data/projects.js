@@ -1,14 +1,14 @@
 import { site } from './site'
 
-// Descriptions only use facts from PORTFOLIO_DESIGN.md.
-// TODO: replace `github` with each project's real repository URL, add `demo` and `image` when available.
+// Mô tả dự án dựa trên thông tin kỹ thuật trong PORTFOLIO_DESIGN.md.
+// Giữ nguyên các thuật ngữ công nghệ quốc tế.
 export const projects = [
   {
     id: 1,
     title: 'AI Story Adventure',
-    subtitle: 'RAG-powered interactive storytelling platform',
+    subtitle: 'Nền tảng tương tác cốt truyện thông minh ứng dụng RAG',
     description:
-      'An interactive storytelling platform where a retrieval-augmented pipeline grounds Gemini-generated narrative in a Qdrant vector store, served through a FastAPI backend.',
+      'Nền tảng phân nhánh cốt truyện tương tác kết hợp mô hình sinh nội dung Gemini và cơ sở dữ liệu vector Qdrant để duy trì tính nhất quán của bối cảnh (lore), vận hành trên backend FastAPI.',
     image: null,
     tags: ['FastAPI', 'Gemini', 'Qdrant', 'RAG', 'React'],
     github: site.github,
@@ -18,9 +18,9 @@ export const projects = [
   {
     id: 2,
     title: 'Vietnamese Medical NLP',
-    subtitle: 'Biomedical retrieval for Vietnamese text',
+    subtitle: 'Truy xuất thông tin y sinh học cho ngôn ngữ tiếng Việt',
     description:
-      'Information retrieval and medical entity processing for Vietnamese biomedical content — bringing NLP techniques to a low-resource, domain-specific language setting.',
+      'Hệ thống truy xuất ngữ nghĩa và xử lý thực thể y tế chuyên biệt cho từ vựng lâm sàng tiếng Việt — kết hợp tìm kiếm kết hợp dense-sparse và trích xuất thực thể y sinh.',
     image: null,
     tags: ['Vietnamese NLP', 'Biomedical IR', 'Entity Processing', 'Retrieval'],
     github: site.github,
@@ -30,11 +30,11 @@ export const projects = [
   {
     id: 3,
     title: 'Football Computer Vision',
-    subtitle: 'Detection & multi-object tracking on match footage',
+    subtitle: 'Nhận diện & theo dõi đa đối tượng trên video trận đấu',
     description:
-      'A computer vision pipeline that detects players with YOLO, tracks them across frames with ByteTrack and uses SigLIP visual embeddings for downstream analysis.',
+      'Pipeline thị giác máy tính tích hợp phát hiện cầu thủ với YOLO, gán không gian liên khung hình với ByteTrack và trích xuất đặc trưng hình ảnh với SigLIP cho phân tích chiến thuật.',
     image: null,
-    tags: ['YOLO', 'ByteTrack', 'SigLIP', 'Tracking'],
+    tags: ['YOLO', 'ByteTrack', 'SigLIP', 'Tracking', 'OpenCV'],
     github: site.github,
     demo: null,
     featured: true,
@@ -42,11 +42,11 @@ export const projects = [
   {
     id: 4,
     title: 'Financial & Tax AI Agent',
-    subtitle: 'Agent architecture for Vietnamese tax compliance',
+    subtitle: 'Kiến trúc AI Agent hỗ trợ tuân thủ và tư vấn thuế',
     description:
-      'An AI agent that reasons over structured financial data and defers to a deterministic rule engine for Vietnamese tax compliance checks.',
+      'Trợ lý Agent doanh nghiệp kết hợp suy luận trên dữ liệu tài chính có cấu trúc và engine luật xác định (rule engine) nhằm đảm bảo tính chuẩn xác theo quy định thuế Việt Nam.',
     image: null,
-    tags: ['AI Agent', 'Rule Engine', 'Structured Data', 'Tax Compliance'],
+    tags: ['AI Agent', 'Rule Engine', 'Structured Data', 'Tax Compliance', 'FastAPI'],
     github: site.github,
     demo: null,
     featured: true,

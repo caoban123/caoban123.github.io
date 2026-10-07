@@ -17,12 +17,12 @@ export function ResearchTimeline() {
             </span>
             <div className="mb-1 font-mono text-[11px] tracking-widest text-zinc-500">
               {String(idx + 1).padStart(2, '0')}
-              {item.current && <span className="ml-2 text-accent-cyan">● NOW</span>}
+              {item.current && <span className="ml-2 text-accent-cyan font-bold">● HIỆN TẠI</span>}
             </div>
             <h4 className={`font-display text-lg font-bold transition-colors ${item.current ? 'text-white' : 'text-zinc-200 group-hover:text-white'}`}>
               {item.title}
             </h4>
-            <p className="mt-1 text-sm leading-relaxed text-zinc-500">{item.description}</p>
+            <p className="mt-1 text-sm leading-relaxed text-zinc-400">{item.description}</p>
           </div>
         </Reveal>
       ))}

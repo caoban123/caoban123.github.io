@@ -24,8 +24,10 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        display: ['Space Grotesk', 'sans-serif'],
+        sans: ['"Be Vietnam Pro"', 'Inter', 'sans-serif'],
+        display: ['"Be Vietnam Pro"', 'sans-serif'],
+        tech: ['"Space Grotesk"', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       }
     },
   },
