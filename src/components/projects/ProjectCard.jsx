@@ -12,7 +12,7 @@ export function ProjectCard({ project, index, total, horizontal = false }) {
     <TiltCard
       maxTilt={horizontal ? 4 : 8}
       scale={1.015}
-      className={`group rounded-[28px] border border-white/[0.08] bg-[#0a0a0f] transition-[border-color,box-shadow] duration-500 hover:border-accent-blue/50 hover:shadow-[0_0_60px_rgba(79,124,255,0.18)] ${
+      className={`group shrink-0 rounded-[28px] border border-white/[0.08] bg-[#0a0a0f] transition-[border-color,box-shadow] duration-500 hover:border-accent-blue/50 hover:shadow-[0_0_60px_rgba(79,124,255,0.18)] ${
         horizontal ? 'h-[72vh] w-[78vw] max-w-[1150px]' : 'w-full'
       }`}
     >

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowRight, Github, FileText, Command, Sparkles, ScanEye, Gauge } from 'lucide-react'
+import { ArrowRight, Github, FileText, Command, Sparkles, ScanEye, Gauge, GraduationCap, Award } from 'lucide-react'
 import { ScrambleText } from '../ui/ScrambleText'
 import { Magnetic } from '../ui/Magnetic'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
@@ -127,18 +127,35 @@ export function Hero({ ready = true }) {
         style={{ y: contentY, scale: contentScale, opacity: contentOpacity }}
         className="relative z-10 mx-auto my-auto flex w-full max-w-5xl flex-col items-center justify-center px-6 text-center will-change-transform"
       >
-        {/* Trạng thái hoạt động với viền sáng xoay */}
+        {/* Cụm thông tin định danh & Thành tích học thuật xuất sắc */}
         <motion.div
           variants={fadeUp(0)}
           initial="hidden"
           animate={show}
-          className="conic-border mb-8 inline-flex items-center gap-2.5 rounded-full border border-emerald-500/15 bg-emerald-500/[0.07] px-4 py-1.5 font-mono text-xs font-medium text-emerald-400 backdrop-blur-md shadow-[0_0_24px_rgba(16,185,129,0.15)]"
+          className="mb-8 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3"
         >
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10B981]" />
-          </span>
-          <span>Sẵn sàng cho dự án AI &amp; Nghiên cứu</span>
+          {/* Trạng thái hoạt động với viền sáng xoay */}
+          <div className="conic-border inline-flex items-center gap-2.5 rounded-full border border-emerald-500/20 bg-emerald-500/[0.08] px-3.5 py-1.5 font-mono text-xs font-medium text-emerald-400 backdrop-blur-md shadow-[0_0_24px_rgba(16,185,129,0.18)]">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10B981]" />
+            </span>
+            <span>Sẵn sàng cho dự án AI</span>
+          </div>
+
+          {/* Huy hiệu GPA 3.88 / 4.0 */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/[0.08] px-3.5 py-1.5 font-mono text-xs font-semibold text-amber-300 backdrop-blur-md shadow-[0_0_20px_rgba(245,158,11,0.18)] transition-all hover:scale-105 hover:border-amber-500/50">
+            <GraduationCap className="h-4 w-4 text-amber-400" />
+            <span>GPA: <strong className="text-white font-bold">3.88 / 4.0</strong></span>
+            <span className="border-l border-amber-500/30 pl-2 text-[10px] font-normal text-amber-400/90 hidden sm:inline">HCMUS</span>
+          </div>
+
+          {/* Huy hiệu TOEIC 900+ */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/[0.08] px-3.5 py-1.5 font-mono text-xs font-semibold text-cyan-300 backdrop-blur-md shadow-[0_0_20px_rgba(34,211,238,0.18)] transition-all hover:scale-105 hover:border-cyan-500/50">
+            <Award className="h-4 w-4 text-cyan-400" />
+            <span>TOEIC: <strong className="text-white font-bold">900+</strong></span>
+            <span className="border-l border-cyan-500/30 pl-2 text-[10px] font-normal text-cyan-400/90 hidden sm:inline">Thành thạo QT</span>
+          </div>
         </motion.div>
 
         {/* Tên — hiện dần từ mờ sang nét, giữ trọn dấu tiếng Việt */}

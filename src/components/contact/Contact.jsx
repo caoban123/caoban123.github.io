@@ -199,9 +199,9 @@ export function Contact() {
           </div>
         </Reveal>
 
-        {/* Nút hành động chính hình tròn có lực hút từ tính */}
+        {/* Nút hành động chính hình tròn phong cách Quantum Orb cao cấp */}
         <Reveal delay={0.25}>
-          <div className="mb-12 flex justify-center">
+          <div className="mb-14 flex justify-center">
             <Magnetic strength={0.4}>
               <a
                 href={primaryHref}
@@ -209,13 +209,32 @@ export function Contact() {
                 rel="noopener noreferrer"
                 onClick={() => soundFx.playClick()}
                 onMouseEnter={() => soundFx.playHover()}
-                className="group flex h-36 w-36 flex-col items-center justify-center gap-2 rounded-full bg-white text-sm font-bold text-black shadow-[0_0_60px_rgba(255,255,255,0.22)] transition-transform hover:scale-105 sm:h-44 sm:w-44"
+                className="group relative flex h-44 w-44 flex-col items-center justify-center overflow-hidden rounded-full p-[2px] shadow-[0_0_50px_rgba(79,124,255,0.3)] transition-all duration-500 hover:scale-105 hover:shadow-[0_0_80px_rgba(34,211,238,0.5)] sm:h-52 sm:w-52"
               >
-                <PrimaryIcon className="h-5 w-5" />
-                <span className="flex items-center gap-1 font-display tracking-wider">
-                  KẾT NỐI TRỰC TIẾP
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </span>
+                {/* Viền gradient xoay 360 độ */}
+                <span className="absolute inset-0 animate-[spin_6s_linear_infinite] rounded-full bg-[conic-gradient(from_0deg,#4F7CFF,#8B5CF6,#22D3EE,#10B981,#4F7CFF)] opacity-80 group-hover:opacity-100" />
+
+                {/* Mặt kính lõi trong suốt đậm chất công nghệ */}
+                <div className="relative flex h-full w-full flex-col items-center justify-center gap-2 rounded-full bg-zinc-950/90 px-4 text-center backdrop-blur-2xl transition-colors duration-500 group-hover:bg-zinc-900/80">
+                  {/* Hào quang trung tâm */}
+                  <div className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_35%,rgba(79,124,255,0.25),transparent_70%)]" />
+
+                  {/* Icon nổi bật */}
+                  <div className="relative flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 text-accent-cyan shadow-[0_0_15px_rgba(34,211,238,0.3)] transition-transform duration-500 group-hover:scale-110">
+                    <PrimaryIcon className="h-5 w-5" />
+                  </div>
+
+                  {/* Chữ hiển thị */}
+                  <div className="relative">
+                    <span className="flex items-center justify-center gap-1 font-display text-xs font-bold tracking-wider text-white uppercase sm:text-sm">
+                      KẾT NỐI TRỰC TIẾP
+                      <ArrowUpRight className="h-4 w-4 text-accent-cyan transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
+                    </span>
+                    <span className="mt-1 block font-mono text-[10px] text-zinc-400 group-hover:text-zinc-200">
+                      {site.email}
+                    </span>
+                  </div>
+                </div>
               </a>
             </Magnetic>
           </div>

@@ -11,7 +11,12 @@ const KNOWLEDGE_BASE = [
   {
     triggers: ['mảng nào', 'chuyên môn', 'kỹ năng', 'lĩnh vực', 'làm gì', 'giới thiệu', 'who', 'about'],
     answer:
-      'Nguyễn Cao Bản là AI Developer & Researcher tại HCMUS (Đại học Khoa học Tự nhiên TP.HCM). Bản chuyên sâu về:\n• Hệ thống truy xuất RAG & Mô hình ngôn ngữ lớn (LLM)\n• Thị giác máy tính (Computer Vision - Object Tracking, Detection)\n• Nghiên cứu mô hình sinh (Generative AI & Video Editing)\n• Kỹ thuật phần mềm hiệu năng cao (FastAPI, Docker, Vector DB).',
+      `Nguyễn Cao Bản là AI Developer & Researcher tại HCMUS với thành tích xuất sắc (GPA: ${site.gpa}, TOEIC: ${site.toeic}).\nBản chuyên sâu về:\n• Hệ thống truy xuất RAG & Mô hình ngôn ngữ lớn (LLM)\n• Thị giác máy tính (Computer Vision - Object Tracking, Detection)\n• Nghiên cứu mô hình sinh (Generative AI & Video Editing)\n• Kỹ thuật phần mềm hiệu năng cao (FastAPI, Docker, Vector DB).`,
+  },
+  {
+    triggers: ['gpa', 'toeic', 'học vấn', 'điểm', 'tiếng anh', 'education', 'hcmus', 'đại học'],
+    answer:
+      `Nguyễn Cao Bản có thành tích học tập và ngoại ngữ xuất sắc:\n• GPA: ${site.gpa} (Đại học Khoa học Tự nhiên ĐHQG-HCM - HCMUS)\n• TOEIC: ${site.toeic} (Sử dụng thành thạo Tiếng Anh trong đọc hiểu tài liệu nghiên cứu, viết báo khoa học và trao đổi chuyên môn quốc tế).`,
   },
   {
     triggers: ['rag', 'vector', 'qdrant', 'retrieval', 'llm', 'truy xuất', 'gemini'],

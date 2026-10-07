@@ -7,6 +7,8 @@ export const site = {
   github: 'https://github.com/caoban123',
   linkedin: 'https://www.linkedin.com/in/caoban123',
   facebook: 'https://www.facebook.com/nguyen.ban.591323/about',
-  email: 'contact.caoban@gmail.com', // Email liên hệ
+  email: 'caoban170106@gmail.com', // Email liên hệ chính xác của người dùng
   cv: '', // Sẽ hiển thị khi có file đặt tại public/cv/
+  gpa: '3.88 / 4.0',
+  toeic: '900+',
 }

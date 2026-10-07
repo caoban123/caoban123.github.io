@@ -155,17 +155,15 @@ export function Projects() {
               </span>
             </div>
 
-            <AnimatePresence mode="popLayout">
-              {filteredProjects.map((project, i) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  index={i}
-                  total={filteredProjects.length}
-                  horizontal
-                />
-              ))}
-            </AnimatePresence>
+            {filteredProjects.map((project, i) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                index={i}
+                total={filteredProjects.length}
+                horizontal
+              />
+            ))}
 
             <MoreOnGithub className="w-[22vw] pl-6" />
           </div>
