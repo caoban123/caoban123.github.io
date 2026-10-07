@@ -12,7 +12,7 @@ export const projects = [
     category: 'AI Agents',
     description:
       'Nguyên mẫu không gian AI Agent thông minh phát triển cho 2026 Global AI Agent Competition (Track A). Kiến trúc phân cấp gồm Campus Router/Aggregator điều phối hơn 14 Agent chuyên biệt qua 5 phân hệ dịch vụ học đường.',
-    image: null,
+    image: '/images/projects/hcmus-campus.webp',
     tags: ['Multi-Agent System', 'Wesome AI', 'Agent Orchestration', 'Smart Campus', 'Global AI Contest'],
     github: 'https://github.com/caoban123/HCMUS-Smart-Campus',
     demo: null,
@@ -25,7 +25,7 @@ export const projects = [
     category: 'Computer Vision',
     description:
       'Hệ thống truy xuất video quy mô lớn cho cuộc thi AIC. Kết hợp tìm kiếm thị giác CLIP, ngữ nghĩa văn bản BGE-M3 / FAISS, từ vựng BM25, intent-aware routing (RRF) và Gemini VLM phục vụ các bài toán KIS, Q&A và TRAKE temporal alignment.',
-    image: null,
+    image: '/images/projects/multi-modal-aic.webp',
     tags: ['CLIP', 'BGE-M3', 'FAISS', 'BM25', 'Gemini VLM', 'Video Retrieval'],
     github: 'https://github.com/caoban123/Multi-model-for-contest',
     demo: null,
@@ -38,7 +38,7 @@ export const projects = [
     category: 'RAG & LLM',
     description:
       'Nền tảng phân nhánh cốt truyện tương tác kết hợp mô hình sinh nội dung Gemini và cơ sở dữ liệu vector Qdrant để duy trì tính nhất quán của bối cảnh (lore), vận hành trên backend FastAPI.',
-    image: null,
+    image: '/images/projects/ai-adventure.webp',
     tags: ['FastAPI', 'Gemini', 'Qdrant', 'RAG', 'React'],
     github: site.github,
     demo: null,
@@ -51,7 +51,7 @@ export const projects = [
     category: 'RAG & LLM',
     description:
       'Hệ thống truy xuất ngữ nghĩa và xử lý thực thể y tế chuyên biệt cho từ vựng lâm sàng tiếng Việt — kết hợp tìm kiếm kết hợp dense-sparse và trích xuất thực thể y sinh.',
-    image: null,
+    image: '/images/projects/medical-nlp.webp',
     tags: ['Vietnamese NLP', 'Biomedical IR', 'Entity Processing', 'Retrieval'],
     github: site.github,
     demo: null,
@@ -64,7 +64,7 @@ export const projects = [
     category: 'Computer Vision',
     description:
       'Pipeline thị giác máy tính tích hợp phát hiện cầu thủ với YOLO, gán không gian liên khung hình với ByteTrack và trích xuất đặc trưng hình ảnh với SigLIP cho phân tích chiến thuật.',
-    image: null,
+    image: '/images/projects/football-cv.webp',
     tags: ['YOLO', 'ByteTrack', 'SigLIP', 'Tracking', 'OpenCV'],
     github: site.github,
     demo: null,

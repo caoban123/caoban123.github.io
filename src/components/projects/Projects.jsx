@@ -1,35 +1,32 @@
-import React, { useLayoutEffect, useRef, useState } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { ArrowUpRight, ArrowRight, Layers } from 'lucide-react'
+import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowUpRight, Github, Sparkles, FolderGit2 } from 'lucide-react'
 import { projects, projectCategories } from '../../data/projects'
 import { site } from '../../data/site'
 import { ProjectCard } from './ProjectCard'
 import { ProjectDetailModal } from './ProjectDetailModal'
 import { Reveal } from '../ui/Reveal'
-import { useMediaQuery } from '../../hooks/useMediaQuery'
-import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { soundFx } from '../../lib/sound'
-
-gsap.registerPlugin(ScrollTrigger)
 
 function Heading() {
   return (
-    <>
+    <div>
       <div className="mb-3 flex items-center gap-2">
         <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan shadow-[0_0_8px_#22D3EE]" />
         <span className="font-mono text-xs uppercase tracking-[0.25em] text-accent-cyan">
           02 // DỰ ÁN THỰC CHIẾN
         </span>
       </div>
-      <h2 className="font-display text-5xl font-black uppercase leading-[1.12] tracking-tight text-white sm:text-7xl">
-        DỰ ÁN <br />
+      <h2 className="font-display text-4xl font-black uppercase leading-tight tracking-tight text-white sm:text-6xl">
+        DỰ ÁN{' '}
         <span className="bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan bg-clip-text text-transparent">
           TIÊU BIỂU
         </span>
       </h2>
-    </>
+      <p className="mt-3 max-w-xl text-sm leading-relaxed text-zinc-400">
+        Các giải pháp trí tuệ nhân tạo chuyên sâu từ truy xuất video đa phương thức, kiểm soát thế giới AI đến hệ thống Multi-Agent học đường. Nhấn vào từng dự án để xem kiến trúc kỹ thuật chi tiết.
+      </p>
+    </div>
   )
 }
 
@@ -37,6 +34,10 @@ function CategoryFilter({ active, onChange }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
       {projectCategories.map((cat) => {
+        const count =
+          cat === 'Tất cả'
+            ? projects.length
+            : projects.filter((p) => p.category === cat).length
         const isSelected = active === cat
         return (
           <button
@@ -46,20 +47,27 @@ function CategoryFilter({ active, onChange }) {
               onChange(cat)
             }}
             onMouseEnter={() => soundFx.playHover()}
-            className={`relative rounded-full px-4 py-1.5 font-mono text-xs font-semibold transition-all duration-300 ${
+            className={`group relative flex items-center gap-2 rounded-full px-4 py-2 font-mono text-xs font-semibold transition-all duration-300 ${
               isSelected
-                ? 'text-white shadow-[0_0_16px_rgba(79,124,255,0.3)]'
+                ? 'text-white shadow-[0_0_20px_rgba(79,124,255,0.35)]'
                 : 'border border-white/[0.08] bg-white/[0.02] text-zinc-400 hover:border-white/20 hover:text-zinc-200'
             }`}
           >
             {isSelected && (
               <motion.span
                 layoutId="activeCategoryIndicator"
-                className="absolute inset-0 rounded-full bg-gradient-to-r from-accent-blue to-accent-purple"
+                className="absolute inset-0 rounded-full bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan"
                 transition={{ type: 'spring', stiffness: 380, damping: 30 }}
               />
             )}
             <span className="relative z-10">{cat}</span>
+            <span
+              className={`relative z-10 rounded-full px-1.5 py-0.5 text-[10px] ${
+                isSelected ? 'bg-white/20 text-white font-bold' : 'bg-white/5 text-zinc-500'
+              }`}
+            >
+              {count}
+            </span>
           </button>
         )
       })}
@@ -67,167 +75,46 @@ function CategoryFilter({ active, onChange }) {
   )
 }
 
-function MoreOnGithub({ className = '' }) {
-  return (
-    <a
-      href={site.github}
-      target="_blank"
-      rel="noopener noreferrer"
-      data-cursor="MỞ"
-      onClick={() => soundFx.playClick()}
-      onMouseEnter={() => soundFx.playHover()}
-      className={`group flex shrink-0 flex-col justify-center gap-4 ${className}`}
-    >
-      <span className="font-mono text-xs uppercase tracking-[0.25em] text-zinc-500">Xem thêm mã nguồn</span>
-      <span className="flex items-center gap-3 font-display text-4xl font-bold text-white transition-colors group-hover:text-accent-cyan">
-        GitHub <ArrowUpRight className="h-8 w-8 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
-      </span>
-    </a>
-  )
-}
-
 export function Projects() {
-  const isDesktop = useMediaQuery('(min-width: 1024px)')
-  const reduced = useReducedMotion()
-  const horizontal = isDesktop && !reduced
-
   const [activeCategory, setActiveCategory] = useState('Tất cả')
   const [detailProject, setDetailProject] = useState(null)
-
-  const sectionRef = useRef(null)
-  const trackRef = useRef(null)
-  const progressRef = useRef(null)
 
   const filteredProjects =
     activeCategory === 'Tất cả'
       ? projects
       : projects.filter((p) => p.category === activeCategory)
 
-  useLayoutEffect(() => {
-    if (!horizontal) return
-    let ro
-    const ctx = gsap.context(() => {
-      const track = trackRef.current
-      if (!track) return
-      const distance = () => Math.max(0, track.scrollWidth - window.innerWidth + 80)
-
-      gsap.to(track, {
-        x: () => -distance(),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: () => `+=${distance()}`,
-          pin: true,
-          scrub: 0.8,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            if (progressRef.current) progressRef.current.style.transform = `scaleX(${self.progress})`
-          },
-        },
-      })
-    }, sectionRef)
-
-    // Tự động làm mới ScrollTrigger khi ảnh/font tải xong để tránh bị khuất các thẻ ở cuối
-    if (typeof ResizeObserver !== 'undefined' && trackRef.current) {
-      ro = new ResizeObserver(() => {
-        ScrollTrigger.refresh()
-      })
-      ro.observe(trackRef.current)
-    }
-
-    // Cập nhật lại ScrollTrigger khi đổi tab lọc
-    const t = setTimeout(() => ScrollTrigger.refresh(), 100)
-    return () => {
-      clearTimeout(t)
-      ro?.disconnect()
-      ctx.revert()
-    }
-  }, [horizontal, activeCategory])
-
-  if (horizontal) {
-    return (
-      <div id="projects">
-        <section ref={sectionRef} className="relative h-screen overflow-hidden">
-          <div ref={trackRef} className="flex h-full items-center gap-8 pl-[6vw] pr-[14vw] will-change-transform">
-            <div className="flex w-[34vw] shrink-0 flex-col justify-center">
-              <Heading />
-              <p className="mt-6 max-w-sm text-sm text-zinc-400 leading-relaxed">
-                Các hệ thống thực tế từ truy xuất dữ liệu, Computer Vision đến AI agents.
-              </p>
-
-              {/* Bộ lọc tab */}
-              <div className="mt-6">
-                <CategoryFilter active={activeCategory} onChange={setActiveCategory} />
-              </div>
-
-              <span className="mt-8 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-zinc-500">
-                Cuộn ngang <ArrowRight className="h-3.5 w-3.5 animate-pulse text-accent-cyan" />
-              </span>
-            </div>
-
-            {filteredProjects.map((project, i) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                index={i}
-                total={filteredProjects.length}
-                horizontal
-                onOpenDetail={setDetailProject}
-              />
-            ))}
-
-            <MoreOnGithub className="w-[22vw] pl-6" />
-          </div>
-
-          {/* Thanh tiến trình cuộn */}
-          <div className="absolute bottom-10 left-[6vw] right-[6vw] h-px bg-white/10">
-            <div
-              ref={progressRef}
-              className="h-full origin-left scale-x-0 bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan"
-            />
-          </div>
-
-          {/* Modal chi tiết kiến trúc dự án (chế độ ngang) */}
-          <ProjectDetailModal
-            project={detailProject}
-            isOpen={!!detailProject}
-            onClose={() => setDetailProject(null)}
-          />
-        </section>
-      </div>
-    )
-  }
-
-  // Chế độ dọc cho Mobile hoặc Reduced-motion
   return (
-    <section id="projects" className="relative py-28">
+    <section id="projects" className="relative py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-6">
-        <Reveal className="mb-8">
-          <Heading />
+        {/* Header & Bộ lọc danh mục */}
+        <Reveal>
+          <div className="mb-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+            <Heading />
+            <div className="shrink-0">
+              <CategoryFilter active={activeCategory} onChange={setActiveCategory} />
+            </div>
+          </div>
         </Reveal>
 
-        {/* Bộ lọc tab trên Mobile/Vertical */}
-        <div className="mb-12">
-          <CategoryFilter active={activeCategory} onChange={setActiveCategory} />
-        </div>
-
-        <motion.div layout className="flex flex-col gap-10">
+        {/* Lưới dự án Compact & Tinh gọn - Chiếm ít diện tích, không cuộn dài */}
+        <motion.div
+          layout
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project, i) => (
               <motion.div
                 key={project.id}
                 layout
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
               >
                 <ProjectCard
                   project={project}
                   index={i}
-                  total={filteredProjects.length}
                   onOpenDetail={setDetailProject}
                 />
               </motion.div>
@@ -235,11 +122,38 @@ export function Projects() {
           </AnimatePresence>
         </motion.div>
 
-        <Reveal className="mt-14">
-          <MoreOnGithub />
+        {/* Banner xem thêm trên GitHub */}
+        <Reveal delay={0.1} className="mt-12">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 backdrop-blur-md sm:flex-row sm:p-8">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-accent-blue/30 bg-accent-blue/10 text-accent-blue">
+                <FolderGit2 className="h-6 w-6" />
+              </div>
+              <div>
+                <h4 className="font-display text-base font-bold text-white sm:text-lg">
+                  Muốn khám phá toàn bộ mã nguồn &amp; thí nghiệm khác?
+                </h4>
+                <p className="text-xs text-zinc-400 sm:text-sm">
+                  Truy cập GitHub cá nhân với hơn 20+ repositories về AI, Computer Vision và Generative Model.
+                </p>
+              </div>
+            </div>
+
+            <a
+              href={site.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => soundFx.playClick()}
+              className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2.5 font-mono text-xs font-semibold text-white transition-all hover:bg-white/20 hover:scale-105"
+            >
+              <Github className="h-4 w-4" />
+              <span>GitHub @caoban123</span>
+              <ArrowUpRight className="h-3.5 w-3.5 text-accent-cyan" />
+            </a>
+          </div>
         </Reveal>
 
-        {/* Modal chi tiết kiến trúc dự án (chế độ dọc) */}
+        {/* Modal chi tiết kiến trúc chuyên sâu */}
         <ProjectDetailModal
           project={detailProject}
           isOpen={!!detailProject}

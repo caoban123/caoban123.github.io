@@ -1,127 +1,143 @@
 import React from 'react'
-import { Github, ExternalLink, Layers } from 'lucide-react'
-import { PipelineVisual } from './PipelineVisual'
-import { Magnetic } from '../ui/Magnetic'
+import { Github, ExternalLink, Layers, Sparkles } from 'lucide-react'
 import { TiltCard } from '../ui/TiltCard'
 import { soundFx } from '../../lib/sound'
 
-export function ProjectCard({ project, index, total, horizontal = false, onOpenDetail }) {
-  const link = project.demo || project.github
+export function ProjectCard({ project, index, onOpenDetail }) {
+  const imageSrc = project.image ? `${import.meta.env.BASE_URL}${project.image.replace(/^\//, '')}` : null
 
   return (
     <TiltCard
-      maxTilt={horizontal ? 4 : 8}
-      scale={1.015}
-      className={`group shrink-0 rounded-[28px] border border-white/[0.08] bg-[#0a0a0f] transition-[border-color,box-shadow] duration-500 hover:border-accent-blue/50 hover:shadow-[0_0_60px_rgba(79,124,255,0.18)] ${
-        horizontal ? 'h-[78vh] min-h-[580px] max-h-[760px] w-[80vw] min-w-[680px] max-w-[1100px]' : 'w-full'
-      }`}
+      maxTilt={6}
+      scale={1.02}
+      onClick={() => {
+        soundFx.playClick()
+        onOpenDetail(project)
+      }}
+      className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c0c14]/85 backdrop-blur-md transition-all duration-300 hover:border-accent-cyan/50 hover:shadow-[0_12px_40px_rgba(34,211,238,0.12)]"
     >
-      <div className={`grid h-full grid-cols-1 gap-6 p-5 sm:p-7 lg:gap-8 lg:p-8 ${horizontal ? 'grid-cols-2' : 'lg:grid-cols-2'}`}>
-        {/* Cột thông tin */}
-        <div className="flex flex-col justify-between overflow-y-auto scrollbar-none pr-1">
-          <div>
-            <div className="mb-3 flex items-center gap-3 font-mono text-xs tracking-widest">
-              <span className="font-bold text-accent-cyan">DỰ ÁN {String(index + 1).padStart(2, '0')}</span>
-              <span className="h-px w-8 bg-zinc-700" />
-              <span className="text-zinc-600">/ {String(total).padStart(2, '0')}</span>
-              {project.category && (
-                <span className="rounded-full border border-accent-purple/30 bg-accent-purple/10 px-2.5 py-0.5 text-[10px] text-accent-purple">
-                  {project.category}
-                </span>
-              )}
+      {/* Khung ảnh đại diện dự án */}
+      <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-white/[0.06] bg-[#12121c]">
+        {imageSrc ? (
+          <img
+            src={imageSrc}
+            alt={project.title}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          />
+        ) : (
+          /* Placeholder khi dự án Finance chưa có ảnh */
+          <div className="relative flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-indigo-950/40 via-zinc-950 to-purple-950/40 p-4 text-center">
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:1.5rem_1.5rem]" />
+            <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-accent-purple/30 bg-accent-purple/10 text-accent-purple shadow-[0_0_20px_rgba(139,92,246,0.2)]">
+              <Sparkles className="h-5 w-5 animate-pulse" />
             </div>
+            <span className="relative mt-2.5 font-mono text-xs font-semibold text-zinc-300">
+              Kiến trúc Rule Engine &amp; AI
+            </span>
+            <span className="relative mt-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 font-mono text-[10px] text-amber-300">
+              Đang đợi ảnh thực tế
+            </span>
+          </div>
+        )}
 
-            <h3 className="mb-2 font-display text-2xl font-bold leading-tight text-white transition-transform duration-500 group-hover:translate-x-1 sm:text-3xl">
-              {project.title}
-            </h3>
-            <p className="mb-3 text-xs sm:text-sm font-medium text-accent-purple leading-snug line-clamp-2">
-              {project.subtitle}
-            </p>
-            <p className="max-w-md text-xs sm:text-sm leading-relaxed text-zinc-400 line-clamp-3 sm:line-clamp-4 lg:line-clamp-none">
-              {project.description}
-            </p>
+        {/* Lớp bóng mờ chuyển dần */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0c0c14] via-transparent to-transparent opacity-80" />
+
+        {/* Badge phân loại */}
+        <div className="absolute left-3 top-3">
+          <span className="rounded-full border border-white/15 bg-black/60 px-2.5 py-1 font-mono text-[10px] font-semibold tracking-wider text-zinc-200 backdrop-blur-md">
+            {project.category}
+          </span>
+        </div>
+
+        {/* Số thứ tự */}
+        <div className="absolute right-3 top-3">
+          <span className="font-mono text-xs font-bold text-white/50 backdrop-blur-sm">
+            #{String(index + 1).padStart(2, '0')}
+          </span>
+        </div>
+      </div>
+
+      {/* Thân card - Nội dung cô đọng */}
+      <div className="flex flex-1 flex-col justify-between p-5">
+        <div>
+          <h3 className="font-display text-lg font-bold text-white transition-colors group-hover:text-accent-cyan sm:text-xl line-clamp-1">
+            {project.title}
+          </h3>
+          <p className="mt-1 text-xs font-medium text-accent-purple line-clamp-1">
+            {project.subtitle}
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-zinc-400 line-clamp-2">
+            {project.description}
+          </p>
+        </div>
+
+        <div className="mt-4 pt-3 border-t border-white/[0.05]">
+          {/* Tags */}
+          <div className="mb-3.5 flex flex-wrap gap-1.5">
+            {project.tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                className="rounded-md border border-white/[0.06] bg-white/[0.03] px-2 py-0.5 font-mono text-[10px] text-zinc-400"
+              >
+                {tag}
+              </span>
+            ))}
+            {project.tags.length > 3 && (
+              <span className="rounded-md border border-white/[0.06] bg-white/[0.03] px-1.5 py-0.5 font-mono text-[10px] text-zinc-500">
+                +{project.tags.length - 3}
+              </span>
+            )}
           </div>
 
-          <div className="mt-auto pt-4">
-            <div className="mb-4 flex flex-wrap gap-1.5">
-              {project.tags.map((tag, i) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] text-zinc-300 transition-all duration-300 group-hover:border-accent-blue/30 group-hover:text-white"
-                  style={{ transitionDelay: `${i * 40}ms` }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+          {/* Cụm nút hành động */}
+          <div className="flex items-center justify-between gap-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                soundFx.playClick()
+                onOpenDetail(project)
+              }}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-accent-cyan/40 bg-accent-cyan/10 px-3 py-1.5 font-mono text-xs font-semibold text-accent-cyan shadow-[0_0_12px_rgba(34,211,238,0.15)] transition-all hover:bg-accent-cyan/25 hover:border-accent-cyan"
+            >
+              <Layers className="h-3.5 w-3.5" /> Kiến trúc ⚡
+            </button>
 
-            <div className="flex flex-wrap items-center gap-2.5">
-              {onOpenDetail && (
-                <Magnetic strength={0.25}>
-                  <button
-                    onClick={() => {
-                      soundFx.playClick()
-                      onOpenDetail(project)
-                    }}
-                    onMouseEnter={() => soundFx.playHover()}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-accent-cyan/35 bg-accent-cyan/10 px-3.5 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-accent-cyan shadow-[0_0_15px_rgba(34,211,238,0.15)] transition-all hover:bg-accent-cyan/20 hover:border-accent-cyan/60 hover:scale-105"
-                  >
-                    <Layers className="h-3.5 w-3.5" /> Kiến trúc ⚡
-                  </button>
-                </Magnetic>
-              )}
-
+            <div className="flex items-center gap-1.5">
               {project.github && (
-                <Magnetic strength={0.25}>
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => soundFx.playClick()}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] px-3.5 py-2 font-mono text-xs uppercase tracking-wider text-zinc-300 transition-colors hover:border-white/30 hover:text-white"
-                  >
-                    <Github className="h-3.5 w-3.5" /> Mã nguồn
-                  </a>
-                </Magnetic>
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    soundFx.playClick()
+                  }}
+                  className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-zinc-400 transition-colors hover:border-white/30 hover:text-white"
+                  title="Xem mã nguồn GitHub"
+                >
+                  <Github className="h-3.5 w-3.5" />
+                </a>
               )}
               {project.demo && (
-                <Magnetic strength={0.25}>
-                  <a
-                    href={project.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => soundFx.playClick()}
-                    className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-2 font-mono text-xs uppercase tracking-wider text-black transition-colors hover:bg-zinc-200"
-                  >
-                    <ExternalLink className="h-3.5 w-3.5" /> Bản chạy thử
-                  </a>
-                </Magnetic>
+                <a
+                  href={project.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    soundFx.playClick()
+                  }}
+                  className="flex h-8 w-8 items-center justify-center rounded-xl bg-white text-black transition-colors hover:bg-zinc-200"
+                  title="Chạy thử demo"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
               )}
             </div>
           </div>
         </div>
-
-        {/* Cột đồ họa / Mockup */}
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-cursor="XEM"
-          aria-label={`Xem dự án ${project.title}`}
-          onClick={() => soundFx.playClick()}
-          className={`block ${horizontal ? 'h-full min-h-[240px]' : 'aspect-[4/3]'}`}
-        >
-          {project.image ? (
-            <img
-              src={`${import.meta.env.BASE_URL}${project.image.replace(/^\//, '')}`}
-              alt={project.title}
-              loading="lazy"
-              className="h-full w-full rounded-2xl object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-            />
-          ) : (
-            <PipelineVisual tags={project.tags} index={index} />
-          )}
-        </a>
       </div>
     </TiltCard>
   )

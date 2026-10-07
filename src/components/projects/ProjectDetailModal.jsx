@@ -211,6 +211,21 @@ export function ProjectDetailModal({ project, isOpen, onClose }) {
               className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-5 sm:p-6 space-y-6 text-sm [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.2)_transparent]"
               onWheel={(e) => e.stopPropagation()}
             >
+              {/* Ảnh thực tế dự án (nếu có) */}
+              {project.image && (
+                <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/50 aspect-[16/9] max-h-[300px]">
+                  <img
+                    src={`${import.meta.env.BASE_URL}${project.image.replace(/^\//, '')}`}
+                    alt={project.title}
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c14] via-transparent to-transparent opacity-60" />
+                  <div className="absolute bottom-3 left-4 font-mono text-xs text-zinc-300">
+                    Ảnh thực tế hệ thống: <span className="font-semibold text-white">{project.title}</span>
+                  </div>
+                </div>
+              )}
+
               {/* Mô tả cốt lõi */}
               <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-4 text-zinc-300 leading-relaxed text-xs sm:text-sm">
                 {project.description}
