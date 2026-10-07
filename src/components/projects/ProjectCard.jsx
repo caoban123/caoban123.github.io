@@ -2,13 +2,17 @@ import React from 'react'
 import { Github, ExternalLink } from 'lucide-react'
 import { PipelineVisual } from './PipelineVisual'
 import { Magnetic } from '../ui/Magnetic'
+import { TiltCard } from '../ui/TiltCard'
+import { soundFx } from '../../lib/sound'
 
 export function ProjectCard({ project, index, total, horizontal = false }) {
   const link = project.demo || project.github
 
   return (
-    <article
-      className={`group relative shrink-0 overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#0a0a0f] transition-[border-color,box-shadow] duration-500 hover:border-accent-blue/40 hover:shadow-[0_0_60px_rgba(79,124,255,0.12)] ${
+    <TiltCard
+      maxTilt={horizontal ? 4 : 8}
+      scale={1.015}
+      className={`group rounded-[28px] border border-white/[0.08] bg-[#0a0a0f] transition-[border-color,box-shadow] duration-500 hover:border-accent-blue/50 hover:shadow-[0_0_60px_rgba(79,124,255,0.18)] ${
         horizontal ? 'h-[72vh] w-[78vw] max-w-[1150px]' : 'w-full'
       }`}
     >
@@ -20,6 +24,11 @@ export function ProjectCard({ project, index, total, horizontal = false }) {
               <span className="font-bold text-accent-cyan">DỰ ÁN {String(index + 1).padStart(2, '0')}</span>
               <span className="h-px w-8 bg-zinc-700" />
               <span className="text-zinc-600">/ {String(total).padStart(2, '0')}</span>
+              {project.category && (
+                <span className="rounded-full border border-accent-purple/30 bg-accent-purple/10 px-2.5 py-0.5 text-[10px] text-accent-purple">
+                  {project.category}
+                </span>
+              )}
             </div>
 
             <h3 className="mb-3 font-display text-3xl font-bold leading-tight text-white transition-transform duration-500 group-hover:translate-x-1 sm:text-4xl">
@@ -49,6 +58,7 @@ export function ProjectCard({ project, index, total, horizontal = false }) {
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => soundFx.playClick()}
                     className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] px-4 py-2 font-mono text-xs uppercase tracking-wider text-zinc-300 transition-colors hover:border-white/30 hover:text-white"
                   >
                     <Github className="h-4 w-4" /> Mã nguồn
@@ -61,6 +71,7 @@ export function ProjectCard({ project, index, total, horizontal = false }) {
                     href={project.demo}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => soundFx.playClick()}
                     className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 font-mono text-xs uppercase tracking-wider text-black transition-colors hover:bg-zinc-200"
                   >
                     <ExternalLink className="h-4 w-4" /> Bản chạy thử
@@ -78,6 +89,7 @@ export function ProjectCard({ project, index, total, horizontal = false }) {
           rel="noopener noreferrer"
           data-cursor="XEM"
           aria-label={`Xem dự án ${project.title}`}
+          onClick={() => soundFx.playClick()}
           className={`block ${horizontal ? 'h-full' : 'aspect-[4/3]'}`}
         >
           {project.image ? (
@@ -92,6 +104,6 @@ export function ProjectCard({ project, index, total, horizontal = false }) {
           )}
         </a>
       </div>
-    </article>
+    </TiltCard>
   )
 }

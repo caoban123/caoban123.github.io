@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
-import { Github, Linkedin, Facebook, Menu, X, Command } from 'lucide-react'
+import { Github, Linkedin, Facebook, Menu, X, Command, Volume2, VolumeX } from 'lucide-react'
 import { scrollToTarget } from '../../lib/scroll'
 import { site } from '../../data/site'
+import { soundFx } from '../../lib/sound'
 
 const navLinks = [
   { name: 'Trang chủ', href: '#home' },
@@ -13,15 +14,23 @@ const navLinks = [
   { name: 'Liên hệ', href: '#contact' },
 ]
 
-const openPalette = () => window.dispatchEvent(new Event('open-command-palette'))
+const openPalette = () => {
+  soundFx.playClick()
+  window.dispatchEvent(new Event('open-command-palette'))
+}
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const [menuOpen, setMenuOpen] = useState(false)
+  const [soundActive, setSoundActive] = useState(false)
   const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform)
   const { scrollYProgress } = useScroll()
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 25, restDelta: 0.001 })
+
+  useEffect(() => {
+    return soundFx.subscribe((enabled) => setSoundActive(enabled))
+  }, [])
 
   useEffect(() => {
     const onScroll = () => {
@@ -42,6 +51,7 @@ export function Navbar() {
 
   const go = (e, href) => {
     e.preventDefault()
+    soundFx.playClick()
     setMenuOpen(false)
     scrollToTarget(href)
   }
@@ -99,10 +109,40 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Icon mạng xã hội: Facebook, LinkedIn, GitHub */}
+          {/* Icon mạng xã hội & Nút âm thanh: Facebook, LinkedIn, GitHub */}
           <div className="hidden items-center gap-2 md:flex">
+            {/* Nút bật/tắt âm thanh sci-fi */}
+            <button
+              onClick={() => soundFx.toggle()}
+              onMouseEnter={() => soundFx.playHover()}
+              className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-[11px] transition-all ${
+                soundActive
+                  ? 'border-accent-cyan/40 bg-accent-cyan/10 text-accent-cyan shadow-[0_0_12px_rgba(34,211,238,0.2)]'
+                  : 'border-white/[0.1] text-zinc-400 hover:border-white/25 hover:text-white'
+              }`}
+              title={soundActive ? 'Tắt âm thanh giao diện' : 'Bật âm thanh giao diện sci-fi'}
+              aria-label="Toggle Sound"
+            >
+              {soundActive ? (
+                <>
+                  <Volume2 className="h-3.5 w-3.5" />
+                  <span className="flex items-center gap-0.5">
+                    <span className="h-2 w-0.5 animate-pulse bg-accent-cyan" />
+                    <span className="h-3 w-0.5 animate-pulse bg-accent-cyan delay-75" />
+                    <span className="h-1.5 w-0.5 animate-pulse bg-accent-cyan delay-150" />
+                  </span>
+                </>
+              ) : (
+                <>
+                  <VolumeX className="h-3.5 w-3.5" />
+                  <span>Mute</span>
+                </>
+              )}
+            </button>
+
             <button
               onClick={openPalette}
+              onMouseEnter={() => soundFx.playHover()}
               className="flex items-center gap-1.5 rounded-full border border-white/[0.1] px-3 py-1.5 font-mono text-[11px] text-zinc-400 transition-colors hover:border-white/25 hover:text-white"
               aria-label="Mở bảng lệnh"
             >
@@ -115,6 +155,7 @@ export function Navbar() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
+              onMouseEnter={() => soundFx.playHover()}
               className="rounded-full p-2 text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-white"
             >
               <Github className="h-4 w-4" />
@@ -126,6 +167,7 @@ export function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
+                onMouseEnter={() => soundFx.playHover()}
                 className="rounded-full p-2 text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-white"
               >
                 <Linkedin className="h-4 w-4" />
@@ -138,6 +180,7 @@ export function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
+                onMouseEnter={() => soundFx.playHover()}
                 className="rounded-full p-2 text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-white"
               >
                 <Facebook className="h-4 w-4" />

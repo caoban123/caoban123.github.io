@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { ArrowUpRight, Github, MapPin, Sparkles } from 'lucide-react'
 import { Reveal } from '../ui/Reveal'
 import { BentoCard } from '../ui/BentoCard'
+import { TiltCard } from '../ui/TiltCard'
 import { site } from '../../data/site'
 import { researchData } from '../../data/research'
 
@@ -195,7 +196,11 @@ export function About() {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             {moments.map((item, idx) => (
               <Reveal key={item.tag} delay={idx * 0.12}>
-                <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/60 p-2 shadow-2xl backdrop-blur-md transition-all duration-500 hover:-translate-y-2 hover:border-accent-blue/50 hover:shadow-[0_20px_40px_rgba(79,124,255,0.25)]">
+                <TiltCard
+                  maxTilt={8}
+                  scale={1.02}
+                  className="group rounded-2xl border border-white/10 bg-zinc-950/60 p-2 shadow-2xl backdrop-blur-md transition-all duration-500 hover:border-accent-blue/50 hover:shadow-[0_20px_40px_rgba(79,124,255,0.25)]"
+                >
                   {/* Khung ảnh tỷ lệ dọc hoàn hảo 4:5 */}
                   <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-zinc-900">
                     <img
@@ -236,7 +241,7 @@ export function About() {
                       </p>
                     </div>
                   </div>
-                </div>
+                </TiltCard>
               </Reveal>
             ))}
           </div>

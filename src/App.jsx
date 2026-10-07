@@ -7,8 +7,10 @@ import { SectionTint } from './components/background/SectionTint'
 import { Cursor } from './components/ui/Cursor'
 import { Preloader } from './components/ui/Preloader'
 import { CommandPalette } from './components/ui/CommandPalette'
+import { AskAIWidget } from './components/ui/AskAIWidget'
 import { Navbar } from './components/layout/Navbar'
 import { Hero } from './components/hero/Hero'
+import { TechMarquee } from './components/hero/TechMarquee'
 import { About } from './components/about/About'
 import { Projects } from './components/projects/Projects'
 import { Research } from './components/research/Research'
@@ -55,12 +57,16 @@ export default function App() {
         {/* Bảng lệnh nhanh Ctrl+K / Terminal */}
         <CommandPalette />
 
+        {/* Trợ lý ảo AI Mini */}
+        <AskAIWidget />
+
         {/* Thanh điều hướng */}
         <Navbar />
 
         {/* Các phân mục chính */}
         <main className="relative z-10 flex flex-col">
           <Hero ready={!loading} />
+          <TechMarquee />
           <About />
           <Projects />
           <Research />

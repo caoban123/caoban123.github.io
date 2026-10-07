@@ -6,6 +6,7 @@ import { Magnetic } from '../ui/Magnetic'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { scrollToTarget } from '../../lib/scroll'
 import { site } from '../../data/site'
+import { soundFx } from '../../lib/sound'
 
 // Giữ nguyên các thuật ngữ định danh chuyên ngành
 const roles = ['AI Developer', 'Machine Learning Engineer', 'RAG & LLM Builder', 'AI Researcher']
@@ -231,8 +232,10 @@ export function Hero({ ready = true }) {
               href="#projects"
               onClick={(e) => {
                 e.preventDefault()
+                soundFx.playClick()
                 scrollToTarget('#projects')
               }}
+              onMouseEnter={() => soundFx.playHover()}
               className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-accent-blue via-accent-purple to-accent-blue bg-[length:200%_auto] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_0_30px_rgba(79,124,255,0.4)] transition-all duration-500 hover:scale-105 hover:bg-right hover:shadow-[0_0_45px_rgba(139,92,246,0.55)]"
             >
               <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
@@ -246,6 +249,8 @@ export function Hero({ ready = true }) {
               href={site.github}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => soundFx.playClick()}
+              onMouseEnter={() => soundFx.playHover()}
               className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.05] px-7 py-3.5 text-sm font-medium text-zinc-200 backdrop-blur-md transition-all hover:scale-105 hover:border-white/25 hover:bg-white/[0.1] hover:text-white"
             >
               <Github className="h-4 w-4" />
@@ -258,6 +263,8 @@ export function Hero({ ready = true }) {
               <a
                 href={site.cv}
                 download
+                onClick={() => soundFx.playClick()}
+                onMouseEnter={() => soundFx.playHover()}
                 className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-transparent px-6 py-3.5 text-sm font-medium text-zinc-400 transition-all hover:scale-105 hover:border-white/20 hover:text-white"
               >
                 <FileText className="h-4 w-4" />
