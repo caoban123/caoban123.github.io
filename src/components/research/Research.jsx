@@ -2,6 +2,7 @@ import React from 'react'
 import { researchData } from '../../data/research'
 import { ResearchTimeline } from './ResearchTimeline'
 import { FlowSimulation } from './FlowSimulation'
+import { VideoComparisonSlider } from './VideoComparisonSlider'
 import { Reveal } from '../ui/Reveal'
 
 export function Research() {
@@ -61,6 +62,11 @@ export function Research() {
             <ResearchTimeline />
           </div>
         </div>
+
+        {/* Thực nghiệm so sánh video trực quan Before/After */}
+        <Reveal delay={0.2} className="mt-14">
+          <VideoComparisonSlider />
+        </Reveal>
       </div>
     </section>
   )

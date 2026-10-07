@@ -1,11 +1,11 @@
 import React from 'react'
-import { Github, ExternalLink } from 'lucide-react'
+import { Github, ExternalLink, Layers } from 'lucide-react'
 import { PipelineVisual } from './PipelineVisual'
 import { Magnetic } from '../ui/Magnetic'
 import { TiltCard } from '../ui/TiltCard'
 import { soundFx } from '../../lib/sound'
 
-export function ProjectCard({ project, index, total, horizontal = false }) {
+export function ProjectCard({ project, index, total, horizontal = false, onOpenDetail }) {
   const link = project.demo || project.github
 
   return (
@@ -51,7 +51,22 @@ export function ProjectCard({ project, index, total, horizontal = false }) {
               ))}
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
+              {onOpenDetail && (
+                <Magnetic strength={0.25}>
+                  <button
+                    onClick={() => {
+                      soundFx.playClick()
+                      onOpenDetail(project)
+                    }}
+                    onMouseEnter={() => soundFx.playHover()}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-accent-cyan/35 bg-accent-cyan/10 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-accent-cyan shadow-[0_0_15px_rgba(34,211,238,0.15)] transition-all hover:bg-accent-cyan/20 hover:border-accent-cyan/60 hover:scale-105"
+                  >
+                    <Layers className="h-3.5 w-3.5" /> Kiến trúc ⚡
+                  </button>
+                </Magnetic>
+              )}
+
               {project.github && (
                 <Magnetic strength={0.25}>
                   <a

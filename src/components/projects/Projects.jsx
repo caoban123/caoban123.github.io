@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { projects, projectCategories } from '../../data/projects'
 import { site } from '../../data/site'
 import { ProjectCard } from './ProjectCard'
+import { ProjectDetailModal } from './ProjectDetailModal'
 import { Reveal } from '../ui/Reveal'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
@@ -91,6 +92,7 @@ export function Projects() {
   const horizontal = isDesktop && !reduced
 
   const [activeCategory, setActiveCategory] = useState('Tất cả')
+  const [detailProject, setDetailProject] = useState(null)
 
   const sectionRef = useRef(null)
   const trackRef = useRef(null)
@@ -162,6 +164,7 @@ export function Projects() {
                 index={i}
                 total={filteredProjects.length}
                 horizontal
+                onOpenDetail={setDetailProject}
               />
             ))}
 
@@ -175,6 +178,13 @@ export function Projects() {
               className="h-full origin-left scale-x-0 bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan"
             />
           </div>
+
+          {/* Modal chi tiết kiến trúc dự án (chế độ ngang) */}
+          <ProjectDetailModal
+            project={detailProject}
+            isOpen={!!detailProject}
+            onClose={() => setDetailProject(null)}
+          />
         </section>
       </div>
     )
@@ -204,7 +214,12 @@ export function Projects() {
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.4 }}
               >
-                <ProjectCard project={project} index={i} total={filteredProjects.length} />
+                <ProjectCard
+                  project={project}
+                  index={i}
+                  total={filteredProjects.length}
+                  onOpenDetail={setDetailProject}
+                />
               </motion.div>
             ))}
           </AnimatePresence>
@@ -213,6 +228,13 @@ export function Projects() {
         <Reveal className="mt-14">
           <MoreOnGithub />
         </Reveal>
+
+        {/* Modal chi tiết kiến trúc dự án (chế độ dọc) */}
+        <ProjectDetailModal
+          project={detailProject}
+          isOpen={!!detailProject}
+          onClose={() => setDetailProject(null)}
+        />
       </div>
     </section>
   )
