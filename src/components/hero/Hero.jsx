@@ -61,50 +61,37 @@ export function Hero({ ready = true }) {
 
         {/* Nội dung bên trái */}
         <div className="relative z-10 flex flex-col justify-center lg:order-1 lg:col-span-7">
-          {/* Avatar nhận diện thương hiệu cá nhân bên trên cùng */}
+          {/* Định danh cá nhân cao cấp: Avatar + Trạng thái hoạt động dạng Capsule thống nhất */}
           <motion.div
             variants={fadeUp(0)}
             initial="hidden"
             animate={show}
-            className="mb-6 flex items-center gap-4 sm:gap-5"
+            className="mb-6 inline-flex items-center gap-3.5 rounded-full border border-white/10 bg-white/[0.03] p-1.5 pr-5 backdrop-blur-md shadow-2xl transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] w-fit"
           >
-            <div className="relative group">
-              {/* Vòng hào quang gradient dạ quang */}
-              <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-accent-blue via-accent-purple to-accent-cyan opacity-70 blur-sm transition duration-500 group-hover:opacity-100 group-hover:blur-md" />
-              
-              {/* Khung ảnh Avatar tròn cao cấp */}
-              <div className="relative h-20 w-20 sm:h-24 sm:w-24 overflow-hidden rounded-full border-2 border-white/20 bg-zinc-900 shadow-[0_0_25px_rgba(79,124,255,0.35)]">
-                <img
-                  src={`${import.meta.env.BASE_URL}images/avatar.png`}
-                  alt="Nguyễn Cao Bản"
-                  className="h-full w-full object-cover object-[center_36%] scale-105 transition-transform duration-500 group-hover:scale-115"
-                  loading="eager"
-                />
-              </div>
-
-              {/* Huy hiệu Active Status */}
-              <div
-                className="absolute bottom-0.5 right-0.5 flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full border-2 border-[#050505] bg-emerald-500 shadow-[0_0_12px_#10B981]"
-                title="Sẵn sàng hợp tác dự án"
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-white animate-ping opacity-80" />
-              </div>
+            {/* Avatar tròn với viền hào quang tinh tế */}
+            <div className="relative h-12 w-12 sm:h-14 sm:w-14 shrink-0 overflow-hidden rounded-full ring-2 ring-accent-blue/50 shadow-md">
+              <img
+                src={`${import.meta.env.BASE_URL}images/avatar.png`}
+                alt="Nguyễn Cao Bản"
+                className="h-full w-full object-cover object-[center_36%] scale-105"
+                loading="eager"
+              />
             </div>
 
-            {/* Thông tin chào đón cạnh Avatar */}
-            <div className="flex flex-col justify-center">
+            {/* Thông tin chào đón chuẩn xác & mạch lạc */}
+            <div className="flex flex-col text-left">
               <div className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan shadow-[0_0_8px_#22D3EE]" />
-                <span className="font-mono text-xs uppercase tracking-[0.25em] text-accent-cyan/90">
-                  XIN CHÀO, TÔI LÀ
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                </span>
+                <span className="font-mono text-xs font-semibold tracking-wide text-emerald-400">
+                  Sẵn sàng nhận dự án AI
                 </span>
               </div>
-              <div className="mt-1.5 flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[11px] text-emerald-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  Sẵn sàng cho dự án AI
-                </span>
-              </div>
+              <span className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-400">
+                Xin chào, tôi là
+              </span>
             </div>
           </motion.div>
 
