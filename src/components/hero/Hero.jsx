@@ -70,7 +70,7 @@ export function Hero({ ready = true }) {
     <section
       id="home"
       onMouseMove={handleMove}
-      className="relative flex min-h-screen flex-col justify-center overflow-hidden pb-16 pt-28"
+      className="relative flex min-h-screen flex-col justify-center overflow-hidden pb-8 pt-28"
     >
       {/* Aurora nền trôi chậm */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -121,7 +121,7 @@ export function Hero({ ready = true }) {
         </motion.div>
 
         {/* Tên — hiện dần từ mờ sang nét, giữ trọn dấu tiếng Việt */}
-        <h1 className="mb-6 font-display text-5xl font-extrabold leading-[1.2] tracking-tight sm:text-7xl md:text-8xl lg:text-[8.5rem]">
+        <h1 className="mb-6 font-display text-5xl font-extrabold leading-[1.2] tracking-tight sm:text-7xl md:text-8xl lg:text-9xl">
           <motion.span
             variants={wordReveal(0.1)}
             initial="hidden"
@@ -253,7 +253,7 @@ export function Hero({ ready = true }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: ready ? 1 : 0 }}
         transition={{ delay: 1.2, duration: 0.8 }}
-        className="absolute bottom-6 left-0 right-0 mx-auto flex max-w-7xl items-end justify-between px-6"
+        className="relative z-10 mx-auto mt-14 flex w-full max-w-7xl items-end justify-between px-6"
       >
         <button
           onClick={() => window.dispatchEvent(new Event('open-command-palette'))}
