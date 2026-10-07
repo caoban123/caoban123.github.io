@@ -1,22 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 
+/** Subtle radial glow following the pointer. Updates a CSS variable instead of React state. */
 export function Spotlight() {
-  const [position, setPosition] = useState({ x: -500, y: -500 })
+  const ref = useRef(null)
 
   useEffect(() => {
-    const handlePointerMove = (e) => {
-      setPosition({ x: e.clientX, y: e.clientY })
+    if (!window.matchMedia('(pointer: fine)').matches) return
+    const onMove = (e) => {
+      ref.current?.style.setProperty('--sx', `${e.clientX}px`)
+      ref.current?.style.setProperty('--sy', `${e.clientY}px`)
     }
-
-    window.addEventListener('pointermove', handlePointerMove, { passive: true })
-    return () => window.removeEventListener('pointermove', handlePointerMove)
+    window.addEventListener('pointermove', onMove, { passive: true })
+    return () => window.removeEventListener('pointermove', onMove)
   }, [])
 
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-0 transition-opacity duration-300"
+      ref={ref}
+      className="pointer-events-none fixed inset-0 z-0"
       style={{
-        background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(79, 124, 255, 0.05), rgba(139, 92, 246, 0.02) 40%, transparent 80%)`,
+        background:
+          'radial-gradient(600px circle at var(--sx, -600px) var(--sy, -600px), rgba(79,124,255,0.06), rgba(139,92,246,0.025) 40%, transparent 80%)',
       }}
     />
   )

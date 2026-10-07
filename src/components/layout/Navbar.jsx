@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Github, Linkedin, Menu, X, ArrowUpRight } from 'lucide-react'
+import { Github, Linkedin, Menu, X, Command } from 'lucide-react'
+import { scrollToTarget } from '../../lib/scroll'
+import { site } from '../../data/site'
 
 const navLinks = [
   { name: 'Home', href: '#home' },
@@ -11,156 +13,135 @@ const navLinks = [
   { name: 'Contact', href: '#contact' },
 ]
 
+const openPalette = () => window.dispatchEvent(new Event('open-command-palette'))
+
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform)
 
   useEffect(() => {
-    const handleScroll = () => {
+    const onScroll = () => {
       setIsScrolled(window.scrollY > 40)
-
-      const sections = navLinks.map((link) => link.href.substring(1))
-      const scrollPosition = window.scrollY + 200
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i])
-        if (el && el.offsetTop <= scrollPosition) {
-          setActiveSection(sections[i])
+      const probe = window.scrollY + window.innerHeight * 0.35
+      for (let i = navLinks.length - 1; i >= 0; i--) {
+        const el = document.querySelector(navLinks[i].href)
+        if (el && el.getBoundingClientRect().top + window.scrollY <= probe) {
+          setActiveSection(navLinks[i].href.slice(1))
           break
         }
       }
     }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  const go = (e, href) => {
+    e.preventDefault()
+    setMenuOpen(false)
+    scrollToTarget(href)
+  }
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          isScrolled
-            ? 'bg-[#050505]/85 backdrop-blur-md border-b border-white/[0.08] py-3.5 shadow-lg shadow-black/50'
-            : 'bg-transparent py-6'
+        className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
+          isScrolled ? 'border-b border-white/[0.08] bg-[#050505]/80 py-3.5 backdrop-blur-md' : 'bg-transparent py-6'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          {/* Logo / Brand */}
-          <a
-            href="#home"
-            className="group flex items-center gap-2 font-display text-lg font-bold tracking-tight text-white"
-          >
-            <span className="h-2 w-2 rounded-full bg-accent-blue shadow-[0_0_10px_#4F7CFF] group-hover:scale-125 transition-transform" />
-            <span className="tracking-wider">NGUYEN CAO BAN</span>
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
+          <a href="#home" onClick={(e) => go(e, '#home')} className="group flex items-center gap-2 font-display text-base font-bold tracking-wider text-white">
+            <span className="h-2 w-2 rounded-full bg-accent-blue shadow-[0_0_10px_#4F7CFF] transition-transform group-hover:scale-125" />
+            {site.shortName}
           </a>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1 rounded-full border border-white/[0.06] bg-white/[0.02] p-1.5 backdrop-blur-sm">
+          <nav className="hidden items-center gap-1 rounded-full border border-white/[0.06] bg-white/[0.02] p-1.5 backdrop-blur-sm md:flex">
             {navLinks.map((link) => {
-              const isActive = activeSection === link.href.substring(1)
+              const isActive = activeSection === link.href.slice(1)
               return (
                 <a
                   key={link.name}
                   href={link.href}
-                  className={`relative px-4 py-1.5 text-xs uppercase tracking-wider font-medium transition-colors ${
+                  onClick={(e) => go(e, link.href)}
+                  className={`relative px-4 py-1.5 text-xs font-medium uppercase tracking-wider transition-colors ${
                     isActive ? 'text-white' : 'text-zinc-400 hover:text-white'
                   }`}
                 >
-                  {link.name}
                   {isActive && (
-                    <motion.div
+                    <motion.span
                       layoutId="activeNavIndicator"
-                      className="absolute inset-0 rounded-full bg-white/[0.1] border border-white/[0.15]"
+                      className="absolute inset-0 rounded-full border border-white/[0.15] bg-white/[0.1]"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
+                  <span className="relative">{link.name}</span>
                 </a>
               )
             })}
           </nav>
 
-          {/* Social Icons & Action */}
-          <div className="hidden md:flex items-center gap-4">
-            <a
-              href="https://github.com/caoban123"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-zinc-400 hover:text-white transition-colors p-2 hover:bg-white/[0.05] rounded-full"
-              aria-label="GitHub"
+          <div className="hidden items-center gap-2 md:flex">
+            <button
+              onClick={openPalette}
+              className="flex items-center gap-1.5 rounded-full border border-white/[0.1] px-3 py-1.5 font-mono text-[11px] text-zinc-400 transition-colors hover:border-white/25 hover:text-white"
+              aria-label="Open command palette"
             >
-              <Github className="w-4 h-4" />
+              <Command className="h-3.5 w-3.5" />
+              {isMac ? '⌘K' : 'Ctrl K'}
+            </button>
+            <a href={site.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="rounded-full p-2 text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-white">
+              <Github className="h-4 w-4" />
             </a>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-zinc-400 hover:text-white transition-colors p-2 hover:bg-white/[0.05] rounded-full"
-              aria-label="LinkedIn"
-            >
-              <Linkedin className="w-4 h-4" />
-            </a>
-            <a
-              href="#contact"
-              className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-black bg-white hover:bg-zinc-200 px-4 py-2 rounded-full transition-all shadow-[0_0_15px_rgba(255,255,255,0.15)]"
-            >
-              Let's Talk
-              <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </a>
+            {site.linkedin && (
+              <a href={site.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="rounded-full p-2 text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-white">
+                <Linkedin className="h-4 w-4" />
+              </a>
+            )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden text-zinc-300 hover:text-white p-2 rounded-lg"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          <button onClick={() => setMenuOpen((o) => !o)} className="rounded-lg p-2 text-zinc-300 hover:text-white md:hidden" aria-label="Toggle menu">
+            {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
       </header>
 
-      {/* Fullscreen Mobile Menu (clip-path reveal) */}
       <AnimatePresence>
-        {isMobileMenuOpen && (
+        {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, clipPath: 'circle(0% at 90% 4%)' }}
-            animate={{ opacity: 1, clipPath: 'circle(150% at 90% 4%)' }}
-            exit={{ opacity: 0, clipPath: 'circle(0% at 90% 4%)' }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-30 bg-[#08080c]/98 backdrop-blur-2xl flex flex-col justify-center px-8 md:hidden"
+            initial={{ clipPath: 'circle(0% at 92% 4%)' }}
+            animate={{ clipPath: 'circle(150% at 92% 4%)' }}
+            exit={{ clipPath: 'circle(0% at 92% 4%)' }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-40 flex flex-col justify-center bg-[#08080c] px-8 md:hidden"
           >
-            <div className="flex flex-col gap-6">
-              <span className="text-xs uppercase tracking-widest text-zinc-500 font-mono">Navigation</span>
-              {navLinks.map((link) => (
-                <a
+            <span className="mb-6 font-mono text-xs uppercase tracking-widest text-zinc-500">Navigation</span>
+            <div className="flex flex-col gap-4">
+              {navLinks.map((link, i) => (
+                <motion.a
                   key={link.name}
                   href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="font-display text-3xl font-bold tracking-tight text-zinc-200 hover:text-accent-cyan transition-colors"
+                  onClick={(e) => go(e, link.href)}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 + i * 0.05 }}
+                  className="flex items-baseline gap-4 font-display text-4xl font-bold tracking-tight text-zinc-200 hover:text-accent-cyan"
                 >
+                  <span className="font-mono text-xs text-zinc-600">0{i + 1}</span>
                   {link.name}
-                </a>
+                </motion.a>
               ))}
             </div>
-
-            <div className="mt-12 pt-8 border-t border-white/[0.08] flex items-center gap-6">
-              <a
-                href="https://github.com/caoban123"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white"
-              >
-                <Github className="w-4 h-4" /> GitHub
+            <div className="mt-12 flex items-center gap-6 border-t border-white/[0.08] pt-8">
+              <a href={site.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white">
+                <Github className="h-4 w-4" /> GitHub
               </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white"
-              >
-                <Linkedin className="w-4 h-4" /> LinkedIn
-              </a>
+              {site.linkedin && (
+                <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white">
+                  <Linkedin className="h-4 w-4" /> LinkedIn
+                </a>
+              )}
             </div>
           </motion.div>
         )}

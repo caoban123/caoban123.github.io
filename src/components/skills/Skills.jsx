@@ -1,69 +1,80 @@
 import React from 'react'
-import { skillCategories } from '../../data/skills'
+import { skillCategories, allSkills } from '../../data/skills'
 import { Reveal } from '../ui/Reveal'
-import { Layers } from 'lucide-react'
+import { BentoCard } from '../ui/BentoCard'
+
+const SPANS = ['md:col-span-3', 'md:col-span-3', 'md:col-span-2', 'md:col-span-2', 'md:col-span-2']
+
+function MarqueeRow({ items, reverse = false }) {
+  const doubled = [...items, ...items]
+  return (
+    <div className="marquee relative flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+      <div className={`marquee-track flex shrink-0 gap-4 pr-4 ${reverse ? 'marquee-reverse' : ''}`}>
+        {doubled.map((s, i) => (
+          <span
+            key={`${s}-${i}`}
+            aria-hidden={i >= items.length}
+            className="whitespace-nowrap font-display text-3xl font-bold text-white/[0.12] transition-colors duration-300 hover:text-white sm:text-5xl"
+          >
+            {s}
+            <span className="ml-4 text-accent-blue/40">✦</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export function Skills() {
+  const half = Math.ceil(allSkills.length / 2)
+
   return (
-    <section id="skills" className="py-28 relative">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
+    <section id="skills" className="relative py-28">
+      <div className="mx-auto max-w-7xl px-6">
         <Reveal>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="mb-4 flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan" />
-            <span className="text-xs font-mono uppercase tracking-[0.25em] text-accent-cyan">
-              04 // CAPABILITIES
-            </span>
+            <span className="font-mono text-xs uppercase tracking-[0.25em] text-accent-cyan">04 // Capabilities</span>
           </div>
         </Reveal>
-
         <Reveal delay={0.1}>
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-            <h2 className="font-display text-4xl sm:text-6xl font-black uppercase tracking-tight text-white">
-              TECHNICAL <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-cyan via-accent-blue to-accent-purple">
-                STACK
-              </span>
+          <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <h2 className="font-display text-5xl font-black uppercase leading-[0.95] tracking-tight text-white sm:text-7xl">
+              Technical <br />
+              <span className="bg-gradient-to-r from-accent-cyan via-accent-blue to-accent-purple bg-clip-text text-transparent">Stack</span>
             </h2>
-            <p className="text-zinc-400 text-sm max-w-sm">
-              Tools, frameworks, and foundational technologies utilized across production systems and academic research.
-            </p>
+            <p className="max-w-sm text-sm text-zinc-400">Grouped by what they're used for — no made-up percentages.</p>
           </div>
         </Reveal>
+      </div>
 
-        {/* Skill Groups Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {skillCategories.map((group, groupIdx) => (
-            <Reveal key={group.category} delay={0.1 * groupIdx}>
-              <div className="p-8 rounded-3xl bg-[#0c0c12] border border-white/[0.07] hover:border-white/[0.18] transition-all duration-300 h-full flex flex-col justify-between group">
-                <div>
-                  <div className="flex items-center justify-between mb-6">
-                    <span className="font-mono text-xs font-semibold uppercase tracking-wider text-accent-cyan">
-                      0{groupIdx + 1}
-                    </span>
-                    <Layers className="w-4 h-4 text-zinc-500 group-hover:text-accent-blue transition-colors" />
-                  </div>
+      {/* Full-bleed marquee */}
+      <div className="mb-16 space-y-3">
+        <MarqueeRow items={allSkills.slice(0, half)} />
+        <MarqueeRow items={allSkills.slice(half)} reverse />
+      </div>
 
-                  <h3 className="font-display text-xl font-bold text-white mb-6">
-                    {group.category}
-                  </h3>
-
-                  {/* Skills Pills */}
-                  <div className="flex flex-wrap gap-2.5">
-                    {group.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="px-3.5 py-1.5 rounded-full text-xs font-mono bg-white/[0.04] border border-white/[0.08] text-zinc-300 hover:text-white hover:bg-accent-blue/20 hover:border-accent-blue/40 hover:scale-105 transition-all cursor-default"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 px-6 md:grid-cols-6">
+        {skillCategories.map((group, i) => (
+          <Reveal key={group.category} className={SPANS[i]} delay={0.06 * i}>
+            <BentoCard className="p-7">
+              <div className="mb-5 flex items-center justify-between">
+                <h3 className="font-display text-xl font-bold text-white">{group.category}</h3>
+                <span className="font-mono text-xs text-zinc-600">{String(group.skills.length).padStart(2, '0')}</span>
               </div>
-            </Reveal>
-          ))}
-        </div>
+              <div className="flex flex-wrap gap-2">
+                {group.skills.map((skill) => (
+                  <span
+                    key={skill}
+                    className="cursor-default rounded-full border border-white/[0.08] bg-white/[0.04] px-3.5 py-1.5 font-mono text-xs text-zinc-300 transition-all hover:scale-105 hover:border-accent-blue/40 hover:bg-accent-blue/15 hover:text-white"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </BentoCard>
+          </Reveal>
+        ))}
       </div>
     </section>
   )

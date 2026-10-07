@@ -1,151 +1,162 @@
-import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Github, FileText, ChevronDown } from 'lucide-react'
-import { HeroCanvas } from './HeroCanvas'
-import { useMousePosition } from '../../hooks/useMousePosition'
+import React, { Suspense, lazy, useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
+import { ArrowRight, Github, FileText, Command } from 'lucide-react'
+import { ScrambleText } from '../ui/ScrambleText'
+import { Magnetic } from '../ui/Magnetic'
+import { useReducedMotion } from '../../hooks/useReducedMotion'
+import { scrollToTarget } from '../../lib/scroll'
+import { site } from '../../data/site'
 
-const roles = [
-  'AI Developer',
-  'Machine Learning Engineer',
-  'RAG & LLM Builder',
-  'AI Researcher',
-]
+const HeroCanvas = lazy(() => import('./HeroCanvas'))
 
-export function Hero() {
-  const [currentRoleIndex, setCurrentRoleIndex] = useState(0)
-  const mouse = useMousePosition()
+const roles = ['AI Developer', 'Machine Learning Engineer', 'RAG & LLM Builder', 'AI Researcher']
+const ease = [0.16, 1, 0.3, 1]
+
+function StaticOrb() {
+  return (
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="h-64 w-64 rounded-full bg-gradient-to-tr from-accent-blue/30 via-accent-purple/20 to-accent-cyan/20 blur-2xl" />
+    </div>
+  )
+}
+
+export function Hero({ ready = true }) {
+  const [roleIndex, setRoleIndex] = useState(0)
+  const reduced = useReducedMotion()
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentRoleIndex((prev) => (prev + 1) % roles.length)
-    }, 2800)
-    return () => clearInterval(interval)
-  }, [])
+    if (!ready) return
+    const id = setInterval(() => setRoleIndex((i) => (i + 1) % roles.length), 3000)
+    return () => clearInterval(id)
+  }, [ready])
+
+  const show = ready ? 'show' : 'hidden'
+  const fadeUp = (delay) => ({
+    hidden: { opacity: 0, y: 24 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.8, delay, ease } },
+  })
 
   return (
-    <section
-      id="home"
-      className="relative min-h-screen flex flex-col justify-center pt-24 pb-12 overflow-hidden"
-    >
-      {/* Background Grid Pattern & Noise subtle styling */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
+    <section id="home" className="relative flex min-h-screen flex-col justify-center overflow-hidden pb-12 pt-24">
+      {/* Grid background */}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
 
-      <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10 my-auto">
-        {/* Left Content */}
-        <div className="lg:col-span-7 flex flex-col justify-center">
-          {/* Label */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex items-center gap-2 mb-4"
-          >
+      <div className="relative mx-auto my-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-12">
+        {/* 3D visual — behind the text on mobile, right column on desktop */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.92 }}
+          transition={{ duration: 1.4, delay: 0.3, ease }}
+          className="pointer-events-none absolute inset-x-0 top-0 h-[70vh] opacity-40 lg:pointer-events-auto lg:relative lg:order-2 lg:col-span-5 lg:h-[560px] lg:opacity-100"
+        >
+          {reduced ? (
+            <StaticOrb />
+          ) : (
+            <Suspense fallback={<StaticOrb />}>
+              <HeroCanvas />
+            </Suspense>
+          )}
+        </motion.div>
+
+        {/* Text */}
+        <div className="relative z-10 flex flex-col justify-center lg:order-1 lg:col-span-7">
+          <motion.div variants={fadeUp(0)} initial="hidden" animate={show} className="mb-4 flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan" />
-            <span className="text-xs font-mono uppercase tracking-[0.25em] text-accent-cyan/90">
-              HELLO, I'M
-            </span>
+            <span className="font-mono text-xs uppercase tracking-[0.25em] text-accent-cyan/90">Hello, I'm</span>
           </motion.div>
 
-          {/* Name Header with Animated Reveal */}
-          <div className="overflow-hidden mb-4">
-            <motion.h1
-              initial={{ y: 80, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight text-white uppercase leading-[0.95]"
-            >
-              NGUYỄN <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan">
-                CAO BẢN
+          <h1 className="mb-5 font-display text-5xl font-black uppercase leading-[0.95] tracking-tight text-white sm:text-7xl lg:text-8xl">
+            {['NGUYỄN', 'CAO BẢN'].map((line, i) => (
+              <span key={line} className="block overflow-hidden pb-1">
+                <motion.span
+                  className={`block ${i === 1 ? 'bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan bg-clip-text text-transparent' : ''}`}
+                  initial={{ y: '110%' }}
+                  animate={{ y: ready ? '0%' : '110%' }}
+                  transition={{ duration: 1, delay: 0.1 + i * 0.12, ease }}
+                >
+                  {line}
+                </motion.span>
               </span>
-            </motion.h1>
-          </div>
+            ))}
+          </h1>
 
-          {/* Dynamic Role Switcher */}
-          <div className="h-9 mb-6 flex items-center overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={roles[currentRoleIndex]}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
-                className="text-lg sm:text-2xl font-mono text-zinc-300 font-semibold"
-              >
-                &gt; {roles[currentRoleIndex]}
-              </motion.div>
-            </AnimatePresence>
-          </div>
+          <motion.div variants={fadeUp(0.35)} initial="hidden" animate={show} className="mb-6 flex h-9 items-center font-mono text-lg font-semibold text-zinc-300 sm:text-2xl">
+            <span className="mr-2 text-accent-blue">&gt;</span>
+            <ScrambleText text={roles[roleIndex]} play={ready} duration={650} />
+            <span className="ml-1 inline-block h-6 w-[2px] animate-pulse bg-accent-cyan" />
+          </motion.div>
 
-          {/* Short Bio Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-zinc-400 text-base sm:text-lg max-w-xl leading-relaxed mb-8"
-          >
+          <motion.p variants={fadeUp(0.45)} initial="hidden" animate={show} className="mb-9 max-w-xl text-base leading-relaxed text-zinc-400 sm:text-lg">
             I build intelligent systems that combine AI models, retrieval systems, computer vision, and reliable software engineering.
           </motion.p>
 
-          {/* Action Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-wrap items-center gap-4"
-          >
-            <a
-              href="#projects"
-              className="group relative inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-accent-blue to-accent-purple text-white font-medium text-sm transition-transform hover:scale-105 shadow-[0_0_25px_rgba(79,124,255,0.3)]"
-            >
-              <span>Explore My Work</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </a>
+          <motion.div variants={fadeUp(0.55)} initial="hidden" animate={show} className="flex flex-wrap items-center gap-3">
+            <Magnetic>
+              <a
+                href="#projects"
+                onClick={(e) => {
+                  e.preventDefault()
+                  scrollToTarget('#projects')
+                }}
+                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-accent-blue to-accent-purple px-6 py-3.5 text-sm font-medium text-white shadow-[0_0_30px_rgba(79,124,255,0.35)]"
+              >
+                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                <span className="relative">Explore My Work</span>
+                <ArrowRight className="relative h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </a>
+            </Magnetic>
 
-            <a
-              href="https://github.com/caoban123"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.1] text-zinc-200 text-sm font-medium transition-colors"
-            >
-              <Github className="w-4 h-4" />
-              <span>GitHub</span>
-            </a>
+            <Magnetic>
+              <a
+                href={site.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.05] px-6 py-3.5 text-sm font-medium text-zinc-200 transition-colors hover:bg-white/[0.1]"
+              >
+                <Github className="h-4 w-4" />
+                GitHub
+              </a>
+            </Magnetic>
 
-            <a
-              href="#contact"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full text-zinc-400 hover:text-white text-sm font-medium transition-colors"
-            >
-              <FileText className="w-4 h-4" />
-              <span>Resume / CV</span>
-            </a>
+            {site.cv && (
+              <Magnetic>
+                <a
+                  href={site.cv}
+                  download
+                  className="inline-flex items-center gap-2 rounded-full px-5 py-3.5 text-sm font-medium text-zinc-400 transition-colors hover:text-white"
+                >
+                  <FileText className="h-4 w-4" />
+                  Download CV
+                </a>
+              </Magnetic>
+            )}
           </motion.div>
         </div>
-
-        {/* Right 3D Visual */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          className="lg:col-span-5 flex items-center justify-center relative"
-        >
-          <div className="w-full max-w-[480px]">
-            <HeroCanvas mouse={mouse} />
-          </div>
-        </motion.div>
       </div>
 
-      {/* Scroll to Explore indicator per Section 11 */}
+      {/* Bottom bar: command palette hint + scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.8 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
+        animate={{ opacity: ready ? 1 : 0 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
+        className="absolute bottom-6 left-0 right-0 mx-auto flex max-w-7xl items-end justify-between px-6"
       >
-        <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">
-          SCROLL TO EXPLORE
-        </span>
-        <div className="w-[1px] h-8 bg-gradient-to-b from-accent-blue/80 via-accent-cyan/40 to-transparent animate-pulse" />
+        <button
+          onClick={() => window.dispatchEvent(new Event('open-command-palette'))}
+          className="hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500 transition-colors hover:text-zinc-300 md:flex"
+        >
+          <Command className="h-3.5 w-3.5" />
+          Press <kbd className="rounded border border-white/15 px-1.5 py-0.5 text-zinc-300">Ctrl K</kbd> to navigate
+        </button>
+
+        <div className="pointer-events-none flex flex-col items-center gap-2 md:absolute md:left-1/2 md:-translate-x-1/2">
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">Scroll to explore</span>
+          <span className="relative block h-10 w-px overflow-hidden bg-white/10">
+            <span className="scroll-line absolute inset-0 bg-gradient-to-b from-accent-blue to-accent-cyan" />
+          </span>
+        </div>
+
+        <span className="hidden md:block" />
       </motion.div>
     </section>
   )

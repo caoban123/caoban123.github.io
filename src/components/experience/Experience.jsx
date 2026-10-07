@@ -1,75 +1,40 @@
 import React from 'react'
 import { experiences } from '../../data/experience'
 import { Reveal } from '../ui/Reveal'
-import { Award, Briefcase, GraduationCap } from 'lucide-react'
 
 export function Experience() {
-  const getCategoryIcon = (category) => {
-    if (category.includes('Competition') || category.includes('Hackathon')) return Award
-    if (category.includes('Academic')) return GraduationCap
-    return Briefcase
-  }
+  // Hidden until real entries are added to src/data/experience.js.
+  if (experiences.length === 0) return null
 
   return (
-    <section id="experience" className="py-28 relative">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
+    <section id="experience" className="relative py-28">
+      <div className="mx-auto max-w-7xl px-6">
         <Reveal>
-          <div className="flex items-center gap-2 mb-4">
+          <div className="mb-4 flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-accent-blue" />
-            <span className="text-xs font-mono uppercase tracking-[0.25em] text-accent-blue">
-              05 // TRACK RECORD
-            </span>
+            <span className="font-mono text-xs uppercase tracking-[0.25em] text-accent-blue">05 // Track record</span>
           </div>
         </Reveal>
-
         <Reveal delay={0.1}>
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-            <h2 className="font-display text-4xl sm:text-6xl font-black uppercase tracking-tight text-white">
-              EXPERIENCE & <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan">
-                COMPETITIONS
-              </span>
-            </h2>
-            <p className="text-zinc-400 text-sm max-w-sm">
-              Academic honors, collaborative research initiatives, and hands-on system building.
-            </p>
-          </div>
+          <h2 className="mb-14 font-display text-5xl font-black uppercase leading-[0.95] tracking-tight text-white sm:text-7xl">
+            Experience &amp; <br />
+            <span className="bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan bg-clip-text text-transparent">Competitions</span>
+          </h2>
         </Reveal>
 
-        {/* Timeline Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {experiences.map((exp, idx) => {
-            const Icon = getCategoryIcon(exp.category)
-            return (
-              <Reveal key={exp.title} delay={0.1 * idx}>
-                <div className="p-8 rounded-3xl bg-[#0c0c12] border border-white/[0.07] hover:border-accent-blue/30 transition-all duration-300 h-full flex flex-col justify-between group">
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="px-3 py-1 rounded-full text-[11px] font-mono uppercase tracking-wider bg-white/[0.04] text-accent-cyan border border-white/[0.08]">
-                        {exp.category}
-                      </span>
-                      <span className="text-xs font-mono text-zinc-500">
-                        {exp.year}
-                      </span>
-                    </div>
-
-                    <h3 className="font-display text-xl font-bold text-white mb-1 group-hover:text-accent-blue transition-colors">
-                      {exp.title}
-                    </h3>
-
-                    <div className="text-sm font-medium text-accent-purple mb-4">
-                      {exp.role}
-                    </div>
-
-                    <p className="text-sm text-zinc-400 leading-relaxed">
-                      {exp.description}
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            )
-          })}
+        <div className="relative border-l border-white/[0.1] pl-8">
+          {experiences.map((exp, idx) => (
+            <Reveal key={exp.title} delay={0.08 * idx} className="relative pb-12 last:pb-0">
+              <span className="absolute -left-[39px] top-1.5 h-4 w-4 rounded-full border-2 border-accent-blue bg-[#050505]" />
+              <div className="mb-2 flex flex-wrap items-center gap-3 font-mono text-xs">
+                <span className="text-accent-cyan">{exp.year}</span>
+                <span className="rounded-full border border-white/[0.08] px-2.5 py-0.5 uppercase tracking-wider text-zinc-400">{exp.category}</span>
+              </div>
+              <h3 className="font-display text-2xl font-bold text-white">{exp.title}</h3>
+              <div className="mb-2 text-sm font-medium text-accent-purple">{exp.role}</div>
+              <p className="max-w-2xl text-sm leading-relaxed text-zinc-400">{exp.description}</p>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>

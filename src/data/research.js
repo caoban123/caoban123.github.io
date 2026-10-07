@@ -1,38 +1,16 @@
+// Research direction from PORTFOLIO_DESIGN.md §18–19.
+// Milestones are conceptual stages of the research lineage, not dated achievements.
 export const researchData = {
-  primaryTopic: "Adaptive Spatio-Temporal Rectified-Flow Video Editing",
-  summary: "Investigating velocity field alignment and temporal consistency in generative continuous-time flow matching models to achieve fine-grained, identity-preserving spatio-temporal video manipulation.",
-  keywords: [
-    "Video Editing",
-    "Rectified Flow",
-    "Diffusion Models",
-    "Flow Matching",
-    "Generative AI",
-    "Computer Vision",
-  ],
+  primaryTopic: 'Adaptive Spatio-Temporal Rectified-Flow Video Editing',
+  summary:
+    'Exploring adaptive spatio-temporal control for video editing with rectified-flow models — edits that follow the prompt while staying consistent across frames.',
+  keywords: ['Video Editing', 'Rectified Flow', 'Diffusion Models', 'Flow Matching', 'Generative AI', 'Computer Vision'],
   milestones: [
-    {
-      stage: "Foundational Generative Dynamics",
-      title: "Video Generation & Diffusion Baselines",
-      year: "2023 - 2024",
-      description: "Examining cross-frame attention mechanics and temporal self-attention in open latent diffusion architectures.",
-    },
-    {
-      stage: "Continuous Trajectory Formulation",
-      title: "Flow Matching & ODE Trajectory Straightening",
-      year: "2024",
-      description: "Analyzing deterministic ODE sampling compared to SDE stochastic diffusion for accelerated, high-fidelity neural image generation.",
-    },
-    {
-      stage: "Velocity Field Alignment",
-      title: "Rectified Flow Video Editing",
-      year: "2025",
-      description: "Developing inversion pipelines along straight paths to avoid error accumulation and ghosting artifacts across video sequence timesteps.",
-    },
-    {
-      stage: "Current Research Focus",
-      title: "Adaptive Spatio-Temporal Control",
-      year: "2026 - Present",
-      description: "Proposing localized adaptive spatial guidance coupled with temporal warp constraints to preserve foreground object semantics during stylistic and prompt-driven video editing.",
-    },
+    { title: 'Video Generation', description: 'Generative models that synthesize coherent frames over time.' },
+    { title: 'Diffusion Editing', description: 'Editing real content by inverting and re-denoising with diffusion models.' },
+    { title: 'Flow Matching', description: 'Learning a velocity field that transports noise to data along an ODE.' },
+    { title: 'Rectified Flow', description: 'Straightening those trajectories so sampling needs far fewer steps.' },
+    { title: 'Video Editing', description: 'Carrying flow-based editing from single images to whole sequences.' },
+    { title: 'Adaptive Spatio-Temporal Control', description: 'Current focus — controlling where and when edits apply, frame by frame.', current: true },
   ],
 }

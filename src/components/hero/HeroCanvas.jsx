@@ -1,31 +1,38 @@
-import React, { Suspense } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { AIOrb } from './AIOrb'
-import { useReducedMotion } from '../../hooks/useReducedMotion'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import { ShaderOrb } from './ShaderOrb'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 
-export function HeroCanvas({ mouse }) {
-  const isReducedMotion = useReducedMotion()
+const MASK = 'radial-gradient(circle closest-side, #000 62%, transparent 100%)'
 
-  if (isReducedMotion) {
-    return (
-      <div className="relative w-full h-full flex items-center justify-center">
-        <div className="w-64 h-64 rounded-full bg-gradient-to-tr from-accent-blue/30 via-accent-purple/20 to-accent-cyan/20 blur-2xl" />
-        <div className="absolute w-48 h-48 rounded-full border border-accent-blue/30" />
-      </div>
-    )
-  }
+// Default export so it can be lazy-loaded (keeps three.js out of the main bundle).
+export default function HeroCanvas() {
+  const wrapRef = useRef(null)
+  const [visible, setVisible] = useState(true)
+  const isMobile = useMediaQuery('(max-width: 767px)')
+
+  // Pause rendering when the hero is off-screen.
+  useEffect(() => {
+    const io = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0 })
+    if (wrapRef.current) io.observe(wrapRef.current)
+    return () => io.disconnect()
+  }, [])
 
   return (
-    <div className="w-full h-[400px] md:h-[550px] relative pointer-events-auto">
+    <div ref={wrapRef} className="h-full w-full" style={{ maskImage: MASK, WebkitMaskImage: MASK }}>
       <Canvas
-        camera={{ position: [0, 0, 5.5], fov: 45 }}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        flat
         dpr={[1, 1.5]}
+        frameloop={visible ? 'always' : 'never'}
+        camera={{ position: [0, 0, 6], fov: 45 }}
+        gl={{ antialias: false, powerPreference: 'high-performance' }}
       >
-        <ambientLight intensity={0.5} />
-        <Suspense fallback={null}>
-          <AIOrb mouse={mouse} />
-        </Suspense>
+        <color attach="background" args={['#050505']} />
+        <ShaderOrb detail={isMobile ? 24 : 56} particleCount={isMobile ? 400 : 1000} />
+        <EffectComposer multisampling={0}>
+          <Bloom mipmapBlur intensity={1.15} luminanceThreshold={0.2} luminanceSmoothing={0.5} radius={0.7} />
+        </EffectComposer>
       </Canvas>
     </div>
   )

@@ -1,69 +1,63 @@
 import React from 'react'
-import { Reveal } from '../ui/Reveal'
 import { Mail, Github, Linkedin, ArrowUpRight } from 'lucide-react'
+import { Reveal } from '../ui/Reveal'
+import { Magnetic } from '../ui/Magnetic'
+import { site } from '../../data/site'
 
 export function Contact() {
-  return (
-    <section id="contact" className="py-32 relative overflow-hidden">
-      {/* Ambient background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-tr from-accent-blue/15 via-accent-purple/10 to-accent-cyan/15 rounded-full blur-[120px] pointer-events-none" />
+  const primaryHref = site.email ? `mailto:${site.email}` : site.github
+  const PrimaryIcon = site.email ? Mail : Github
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
+  return (
+    <section id="contact" className="relative flex min-h-[90vh] items-center overflow-hidden py-32">
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 animate-[spin_30s_linear_infinite] rounded-full bg-gradient-to-tr from-accent-blue/20 via-accent-purple/10 to-accent-cyan/20 blur-[120px]" />
+
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 text-center">
         <Reveal>
-          <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.08]">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan animate-ping" />
-            <span className="text-xs font-mono uppercase tracking-[0.25em] text-accent-cyan">
-              OPEN FOR RESEARCH & COLLABORATION
-            </span>
-          </div>
+          <span className="font-mono text-xs uppercase tracking-[0.3em] text-zinc-500">Have an idea?</span>
         </Reveal>
 
         <Reveal delay={0.1}>
-          <h2 className="font-display text-4xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tight text-white mb-8 max-w-4xl mx-auto leading-[0.95]">
-            HAVE AN IDEA? <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan">
-              LET'S BUILD IT.
-            </span>
+          <h2 className="mx-auto mb-12 mt-6 font-display text-6xl font-black uppercase leading-[0.9] tracking-tight text-white sm:text-8xl lg:text-[10rem]">
+            Let's <br />
+            <span className="bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan bg-clip-text text-transparent">build it.</span>
           </h2>
         </Reveal>
 
         <Reveal delay={0.2}>
-          <p className="text-zinc-400 text-base sm:text-lg max-w-xl mx-auto mb-12">
-            Whether you want to discuss generative video architectures, RAG systems, or explore engineering opportunities, feel free to reach out.
-          </p>
+          <div className="mb-10 flex justify-center">
+            <Magnetic strength={0.4}>
+              <a
+                href={primaryHref}
+                target={site.email ? undefined : '_blank'}
+                rel="noopener noreferrer"
+                className="group flex h-40 w-40 flex-col items-center justify-center gap-2 rounded-full bg-white text-sm font-semibold text-black shadow-[0_0_60px_rgba(255,255,255,0.18)] transition-transform hover:scale-105 sm:h-44 sm:w-44"
+              >
+                <PrimaryIcon className="h-5 w-5" />
+                <span className="flex items-center gap-1">
+                  GET IN TOUCH
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </span>
+              </a>
+            </Magnetic>
+          </div>
         </Reveal>
 
-        {/* Action Buttons */}
         <Reveal delay={0.3}>
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
-            <a
-              href="mailto:contact@caoban.dev"
-              className="group inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-black font-semibold text-sm hover:bg-zinc-200 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-105"
-            >
-              <Mail className="w-4 h-4" />
-              <span>GET IN TOUCH</span>
-              <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          <div className="flex flex-wrap items-center justify-center gap-3 font-mono text-xs uppercase tracking-wider">
+            <a href={site.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] px-5 py-2.5 text-zinc-300 transition-colors hover:border-white/30 hover:text-white">
+              <Github className="h-4 w-4" /> GitHub
             </a>
-
-            <a
-              href="https://github.com/caoban123"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-7 py-4 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] text-white text-sm font-medium transition-all"
-            >
-              <Github className="w-4 h-4" />
-              <span>GitHub</span>
-            </a>
-
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-7 py-4 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] text-white text-sm font-medium transition-all"
-            >
-              <Linkedin className="w-4 h-4" />
-              <span>LinkedIn</span>
-            </a>
+            {site.linkedin && (
+              <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] px-5 py-2.5 text-zinc-300 transition-colors hover:border-white/30 hover:text-white">
+                <Linkedin className="h-4 w-4" /> LinkedIn
+              </a>
+            )}
+            {site.email && (
+              <a href={`mailto:${site.email}`} className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] px-5 py-2.5 normal-case text-zinc-300 transition-colors hover:border-white/30 hover:text-white">
+                <Mail className="h-4 w-4" /> {site.email}
+              </a>
+            )}
           </div>
         </Reveal>
       </div>
