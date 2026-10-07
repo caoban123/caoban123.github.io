@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SmoothScroll } from './components/layout/SmoothScroll'
-import { Spotlight } from './components/ui/Spotlight'
+import { CosmicBackground } from './components/background/CosmicBackground'
 import { Cursor } from './components/ui/Cursor'
 import { Preloader } from './components/ui/Preloader'
 import { CommandPalette } from './components/ui/CommandPalette'
@@ -42,11 +42,19 @@ export default function App() {
       <AnimatePresence>{loading && <Preloader key="preloader" onComplete={finishLoading} />}</AnimatePresence>
 
       <div className="relative min-h-screen bg-[#050505] text-[#F5F5F5]">
-        <Spotlight />
+        {/* Background siêu sống động: Kết hợp 1 (Khói chất lỏng WebGL Navier-Stokes) + 2 (Đường hầm Hyperspace Warp) */}
+        <CosmicBackground />
+
+        {/* Con trỏ thông minh desktop */}
         <Cursor />
+
+        {/* Bảng lệnh nhanh Ctrl+K / Terminal */}
         <CommandPalette />
+
+        {/* Thanh điều hướng */}
         <Navbar />
 
+        {/* Các phân mục chính */}
         <main className="relative z-10 flex flex-col">
           <Hero ready={!loading} />
           <About />
@@ -57,6 +65,7 @@ export default function App() {
           <Contact />
         </main>
 
+        {/* Chân trang */}
         <Footer />
       </div>
     </SmoothScroll>
