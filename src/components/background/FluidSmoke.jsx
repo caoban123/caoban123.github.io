@@ -16,36 +16,25 @@ export function FluidSmoke() {
       fluidRef.current = fluid
 
       fluid.setConfig({
-        simResolution: 128,
-        dyeResolution: 1024,
-        densityDissipation: 3.2, // Khói tan nhanh và êm sau ~0.8 giây, không bị đọng bọng
-        velocityDissipation: 1.8,
+        simResolution: 64, // Giảm độ phân giải mô phỏng để nhẹ GPU
+        dyeResolution: 512,
+        densityDissipation: 4.2, // Khói tan nhanh hơn, chỉ còn vệt mảnh theo chuột
+        velocityDissipation: 2.4,
         pressure: 0.8,
-        curl: 24, // Xoáy cuộn mềm mại, thanh mảnh
-        splatRadius: 0.10, // Kích thước dải khói thu nhỏ thanh mảnh, tinh tế, không bị bự
-        splatForce: 2500, // Lực đẩy vừa phải, êm dịu
+        curl: 20,
+        splatRadius: 0.06, // Vệt khói nhỏ, thanh mảnh
+        splatForce: 2000,
         shading: true,
         colorful: false,
-        colorPalette: ['#22D3EE', '#4F7CFF', '#8B5CF6', '#06B6D4'], // Dải màu Cyber Blue & Violet dịu mắt
+        colorPalette: ['#22D3EE', '#4F7CFF', '#8B5CF6', '#06B6D4'],
         hover: true,
         transparent: true,
         backgroundColor: '#00000000',
-        bloom: true,
-        bloomIntensity: 0.18, // Giảm mạnh phát quang để tuyệt đối không chói mắt
-        bloomThreshold: 0.72,
-        brightness: 0.45, // Độ sáng vừa dịu, sang trọng trên nền tối
+        bloom: false, // Tắt bloom để không chói và nhẹ hơn
+        brightness: 0.4,
       })
 
       fluid.start()
-
-      // Khởi tạo một vệt xoáy dạ quang nhẹ nhàng ban đầu
-      setTimeout(() => {
-        try {
-          const cx = window.innerWidth / 2
-          const cy = window.innerHeight * 0.45
-          fluid.splatAtLocation(cx, cy, 120, 80)
-        } catch (e) {}
-      }, 350)
     } catch (err) {
       console.warn('WebGL Fluid initialization skipped:', err)
       return
@@ -132,37 +121,14 @@ export function FluidSmoke() {
       handlePointerMove({ clientX: touch.clientX, clientY: touch.clientY })
     }
 
-    // Khi cuộn trang, tạo vệt khói dạ quang nhẹ
-    let lastScrollY = window.scrollY
-    let scrollThrottle = 0
-    const handleScroll = () => {
-      const now = performance.now()
-      if (now - scrollThrottle < 180) return
-      const currentScrollY = window.scrollY
-      const delta = Math.abs(currentScrollY - lastScrollY)
-      lastScrollY = currentScrollY
-
-      if (delta > 40 && fluid) {
-        scrollThrottle = now
-        const normX = 0.25 + Math.random() * 0.5
-        const normY = 0.3 + Math.random() * 0.4
-        const color = getNextColor()
-        if (fluid.simulation && typeof fluid.simulation.splat === 'function') {
-          fluid.simulation.splat(normX, normY, (Math.random() - 0.5) * 200, -delta * 2, color)
-        }
-      }
-    }
-
     window.addEventListener('pointermove', handlePointerMove, { passive: true })
     window.addEventListener('pointerdown', handlePointerDown, { passive: true })
     window.addEventListener('touchmove', handleTouchMove, { passive: true })
-    window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('pointerdown', handlePointerDown)
       window.removeEventListener('touchmove', handleTouchMove)
-      window.removeEventListener('scroll', handleScroll)
       if (fluid) {
         try {
           fluid.stop()
