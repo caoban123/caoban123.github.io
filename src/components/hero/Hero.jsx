@@ -61,37 +61,53 @@ export function Hero({ ready = true }) {
 
         {/* Nội dung bên trái */}
         <div className="relative z-10 flex flex-col justify-center lg:order-1 lg:col-span-7">
-          {/* Định danh cá nhân cao cấp: Avatar + Trạng thái hoạt động dạng Capsule thống nhất */}
+          {/* Spotlight Định danh cá nhân: Avatar sang trọng + Lời chào & Trạng thái */}
           <motion.div
             variants={fadeUp(0)}
             initial="hidden"
             animate={show}
-            className="mb-6 inline-flex items-center gap-3.5 rounded-full border border-white/10 bg-white/[0.03] p-1.5 pr-5 backdrop-blur-md shadow-2xl transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] w-fit"
+            className="mb-8 flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-6"
           >
-            {/* Avatar tròn với viền hào quang tinh tế */}
-            <div className="relative h-12 w-12 sm:h-14 sm:w-14 shrink-0 overflow-hidden rounded-full ring-2 ring-accent-blue/50 shadow-md">
-              <img
-                src={`${import.meta.env.BASE_URL}images/avatar.png`}
-                alt="Nguyễn Cao Bản"
-                className="h-full w-full object-cover object-[center_36%] scale-105"
-                loading="eager"
-              />
-            </div>
+            {/* Khung ảnh đại diện tròn nổi bật với hào quang đa sắc */}
+            <div className="relative group shrink-0 w-fit">
+              {/* Vầng hào quang chuyển sắc phía sau */}
+              <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-accent-blue via-accent-purple to-accent-cyan opacity-75 blur-md transition duration-500 group-hover:opacity-100 group-hover:blur-lg" />
 
-            {/* Thông tin chào đón chuẩn xác & mạch lạc */}
-            <div className="flex flex-col text-left">
-              <div className="flex items-center gap-2">
-                <span className="relative flex h-2 w-2">
+              {/* Khung Avatar cao cấp */}
+              <div className="relative h-20 w-20 sm:h-22 sm:w-22 overflow-hidden rounded-full border-2 border-white/25 bg-zinc-950 shadow-[0_0_25px_rgba(79,124,255,0.35)]">
+                <img
+                  src={`${import.meta.env.BASE_URL}images/avatar.png`}
+                  alt="Nguyễn Cao Bản"
+                  className="h-full w-full object-cover object-[center_36%] scale-105 transition-transform duration-500 group-hover:scale-110"
+                  loading="eager"
+                />
+              </div>
+
+              {/* Huy hiệu Active tinh xảo ở góc dưới */}
+              <div
+                className="absolute bottom-0.5 right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#050505] ring-2 ring-[#050505]"
+                title="Đang sẵn sàng nhận dự án"
+              >
+                <span className="relative flex h-2.5 w-2.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-                </span>
-                <span className="font-mono text-xs font-semibold tracking-wide text-emerald-400">
-                  Sẵn sàng nhận dự án AI
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10B981]" />
                 </span>
               </div>
-              <span className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-400">
-                Xin chào, tôi là
-              </span>
+            </div>
+
+            {/* Thông tin giới thiệu bên cạnh: Bố cục thanh lịch, tách bạch */}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan shadow-[0_0_8px_#22D3EE]" />
+                <span className="font-mono text-xs uppercase tracking-[0.25em] text-accent-cyan/90 font-semibold">
+                  XIN CHÀO, TÔI LÀ
+                </span>
+              </div>
+
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 font-mono text-xs font-medium text-emerald-400 backdrop-blur-md w-fit shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Sẵn sàng cho dự án AI &amp; Nghiên cứu</span>
+              </div>
             </div>
           </motion.div>
 

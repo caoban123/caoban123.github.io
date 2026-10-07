@@ -22,18 +22,18 @@ export function FluidSmoke() {
         velocityDissipation: 1.5,
         pressure: 0.8,
         curl: 30, // Xoáy cuộn mềm mại
-        splatRadius: 0.22, // Kích thước dải lụa rõ ràng, sắc nét
-        splatForce: 5500, // Lực đẩy chuẩn xác
+        splatRadius: 0.28, // Kích thước dải lụa rõ ràng, đẹp mắt
+        splatForce: 6000, // Lực đẩy chuẩn của thư viện để khói bung nở sống động
         shading: true,
         colorful: false,
-        colorPalette: ['#4F7CFF', '#8B5CF6', '#22D3EE', '#6366F1', '#A855F7'], // Tím Neon, Lam Điện, Lục Lam
+        colorPalette: ['#22D3EE', '#4F7CFF', '#8B5CF6', '#EC4899', '#06B6D4'], // Cyber Cyan, Electric Blue, Violet, Neon Pink
         hover: true,
         transparent: true,
         backgroundColor: '#00000000',
         bloom: true,
-        bloomIntensity: 0.45, // Phát sáng huyền ảo, không chói
+        bloomIntensity: 0.65, // Phát sáng sống động, huyền ảo
         bloomThreshold: 0.45,
-        brightness: 0.85, // Sắc nét, tương phản hoàn hảo
+        brightness: 0.9, // Sắc nét, nổi bật trên nền đen
       })
 
       fluid.start()
@@ -43,7 +43,7 @@ export function FluidSmoke() {
         try {
           const cx = window.innerWidth / 2
           const cy = window.innerHeight * 0.45
-          fluid.splatAtLocation(cx, cy, 250, 150)
+          fluid.splatAtLocation(cx, cy, 300, 180)
         } catch (e) {}
       }, 350)
     } catch (err) {
@@ -71,10 +71,17 @@ export function FluidSmoke() {
       const dy = y - lastY
       const dist = Math.hypot(dx, dy)
 
-      // Phun khói trực tiếp bám sát theo từng pixel con trỏ chuột di chuyển
-      if (dist > 3) {
-        const forceX = dx * 35
-        const forceY = -dy * 35
+      // Cập nhật sự kiện chuột trực tiếp vào mô phỏng
+      if (fluid.simulation && typeof fluid.simulation.handleMouseMove === 'function') {
+        try {
+          fluid.simulation.handleMouseMove({ offsetX: x, offsetY: y })
+        } catch (err) {}
+      }
+
+      // Đồng thời bổ sung một lực phun rõ nét theo vector di chuyển
+      if (dist > 2) {
+        const forceX = dx * 45
+        const forceY = -dy * 45
         fluid.splatAtLocation(x, y, forceX, forceY)
         lastX = x
         lastY = y
@@ -83,8 +90,12 @@ export function FluidSmoke() {
 
     const handlePointerDown = (e) => {
       if (!fluid) return
-      // Nhấp chuột: Bùng nổ vệt khói dạ quang tại vị trí bấm
-      fluid.splatAtLocation(e.clientX, e.clientY, (Math.random() - 0.5) * 450, (Math.random() - 0.5) * 450)
+      if (fluid.simulation && typeof fluid.simulation.handleMouseDown === 'function') {
+        try {
+          fluid.simulation.handleMouseDown({ offsetX: e.clientX, offsetY: e.clientY })
+        } catch (err) {}
+      }
+      fluid.splatAtLocation(e.clientX, e.clientY, (Math.random() - 0.5) * 600, (Math.random() - 0.5) * 600)
     }
 
     const handleTouchMove = (e) => {
@@ -107,7 +118,7 @@ export function FluidSmoke() {
         scrollThrottle = now
         const x = window.innerWidth * (0.25 + Math.random() * 0.5)
         const y = window.innerHeight * (0.25 + Math.random() * 0.5)
-        fluid.splatAtLocation(x, y, (Math.random() - 0.5) * 500, -delta * 3.5)
+        fluid.splatAtLocation(x, y, (Math.random() - 0.5) * 550, -delta * 4)
       }
     }
 
@@ -135,7 +146,7 @@ export function FluidSmoke() {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden opacity-85"
+      className="pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden opacity-90"
     />
   )
 }

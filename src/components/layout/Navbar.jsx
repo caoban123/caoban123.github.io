@@ -55,16 +55,10 @@ export function Navbar() {
           <a
             href="#home"
             onClick={(e) => go(e, '#home')}
-            className="group flex items-center gap-2.5 font-display text-base font-bold tracking-wider text-white"
+            className="group flex items-center gap-2 font-display text-base font-bold tracking-wider text-white"
           >
-            <div className="relative h-7 w-7 overflow-hidden rounded-full border border-white/20 ring-1 ring-accent-blue/40 shadow-[0_0_10px_rgba(79,124,255,0.4)] transition-transform duration-300 group-hover:scale-110">
-              <img
-                src={`${import.meta.env.BASE_URL}images/avatar.png`}
-                alt="Avatar"
-                className="h-full w-full object-cover object-[center_36%] scale-105"
-              />
-            </div>
-            {site.shortName}
+            <span className="h-2 w-2 rounded-full bg-accent-blue shadow-[0_0_10px_#4F7CFF] transition-transform group-hover:scale-125" />
+            {site.name}
           </a>
 
           {/* Desktop Nav tiếng Việt */}
