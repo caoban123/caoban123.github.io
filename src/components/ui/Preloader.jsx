@@ -20,8 +20,6 @@ export function Preloader({ onComplete }) {
 
   // Đếm từ 0 -> 100% với gia tốc mượt mà
   useEffect(() => {
-    import('../hero/HeroCanvas')
-
     let raf
     const start = performance.now()
     const step = (now) => {
