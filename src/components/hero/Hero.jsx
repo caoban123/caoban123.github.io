@@ -13,10 +13,10 @@ const HeroCanvas = lazy(() => import('./HeroCanvas'))
 const roles = ['AI Developer', 'Machine Learning Engineer', 'RAG & LLM Builder', 'AI Researcher']
 const ease = [0.16, 1, 0.3, 1]
 
-function StaticOrb() {
+function StaticPlaceholder() {
   return (
     <div className="flex h-full w-full items-center justify-center">
-      <div className="h-64 w-64 rounded-full bg-gradient-to-tr from-accent-blue/30 via-accent-purple/20 to-accent-cyan/20 blur-2xl" />
+      <div className="h-64 w-64 rounded-full bg-gradient-to-tr from-accent-blue/25 via-red-500/20 to-accent-cyan/25 blur-3xl animate-pulse" />
     </div>
   )
 }
@@ -51,9 +51,9 @@ export function Hero({ ready = true }) {
           className="pointer-events-none absolute inset-x-0 top-0 h-[70vh] opacity-40 lg:pointer-events-auto lg:relative lg:order-2 lg:col-span-5 lg:h-[560px] lg:opacity-100"
         >
           {reduced ? (
-            <StaticOrb />
+            <StaticPlaceholder />
           ) : (
-            <Suspense fallback={<StaticOrb />}>
+            <Suspense fallback={<StaticPlaceholder />}>
               <HeroCanvas />
             </Suspense>
           )}
