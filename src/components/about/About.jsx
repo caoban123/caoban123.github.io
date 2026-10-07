@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ArrowUpRight, Github, MapPin } from 'lucide-react'
+import { ArrowUpRight, Github, MapPin, Sparkles } from 'lucide-react'
 import { Reveal } from '../ui/Reveal'
 import { BentoCard } from '../ui/BentoCard'
 import { site } from '../../data/site'
@@ -12,6 +12,34 @@ const proof = [
   'Xây dựng hệ thống truy xuất thông minh kết hợp Qdrant và Gemini.',
   'Triển khai tracking đối tượng thời gian thực với YOLO và ByteTrack.',
   'Nghiên cứu kiểm soát thích ứng không - thời gian trong Rectified Flow video editing.',
+]
+
+// 3 ảnh phong cách sống & khoảnh khắc đời thường hiển thị ở cùng 1 dòng
+const moments = [
+  {
+    src: `${import.meta.env.BASE_URL}images/photo-1.png`,
+    tag: 'EXPLORE // 01',
+    category: 'Ngoại cảnh',
+    location: 'Đà Lạt, Lâm Đồng',
+    title: 'Cảm Hứng Thiên Nhiên',
+    caption: 'Những chuyến đi trải nghiệm giúp tái tạo năng lượng và góc nhìn đa chiều.',
+  },
+  {
+    src: `${import.meta.env.BASE_URL}images/photo-2.png`,
+    tag: 'LIFESTYLE // 02',
+    category: 'Đời thường',
+    location: 'TP. Hồ Chí Minh',
+    title: 'Chân Dung Thường Nhật',
+    caption: 'Nhiệt huyết công nghệ, tư duy cởi mở và tinh thần kiên trì theo đuổi AI.',
+  },
+  {
+    src: `${import.meta.env.BASE_URL}images/photo-3.jpg`,
+    tag: 'COMPANION // 03',
+    category: 'Mèo cưng',
+    location: 'Góc làm việc',
+    title: 'Bạn Đồng Hành 4 Chân',
+    caption: 'Điểm tựa bình yên và niềm vui giản dị giúp cân bằng cuộc sống sau giờ code.',
+  },
 ]
 
 function LocalTime() {
@@ -41,6 +69,7 @@ export function About() {
           </div>
         </Reveal>
 
+        {/* Bento Grid Giới Thiệu Cốt Lõi */}
         <div className="grid auto-rows-[minmax(180px,auto)] grid-cols-1 gap-4 md:grid-cols-6">
           {/* Tuyên ngôn cốt lõi */}
           <Reveal className="md:col-span-4 md:row-span-2">
@@ -143,6 +172,74 @@ export function About() {
               </div>
             </BentoCard>
           </Reveal>
+        </div>
+
+        {/* Khoảnh khắc & Bản sắc cá nhân — 3 Ảnh ở cùng 1 dòng trên Desktop */}
+        <div className="mt-14">
+          <Reveal>
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-2 border-t border-white/[0.06] pt-10">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent-purple shadow-[0_0_8px_#8B5CF6]" />
+                <span className="font-mono text-xs uppercase tracking-[0.25em] text-accent-purple">
+                  KHOẢNH KHẮC &amp; ĐỜI THƯỜNG // BEYOND THE SCREEN
+                </span>
+              </div>
+              <div className="flex items-center gap-2 font-mono text-xs text-zinc-500">
+                <Sparkles className="h-3.5 w-3.5 text-accent-cyan" />
+                <span>3 KHOẢNH KHẮC • 1 BẢN SẮC</span>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Hàng 3 ảnh ở cùng 1 dòng */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {moments.map((item, idx) => (
+              <Reveal key={item.tag} delay={idx * 0.12}>
+                <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/60 p-2 shadow-2xl backdrop-blur-md transition-all duration-500 hover:-translate-y-2 hover:border-accent-blue/50 hover:shadow-[0_20px_40px_rgba(79,124,255,0.25)]">
+                  {/* Khung ảnh tỷ lệ dọc hoàn hảo 4:5 */}
+                  <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-zinc-900">
+                    <img
+                      src={item.src}
+                      alt={item.title}
+                      className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-108"
+                      loading="lazy"
+                    />
+
+                    {/* Gradient tối chân ảnh để chữ nổi bật */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-transparent opacity-85 transition-opacity duration-300 group-hover:opacity-75" />
+
+                    {/* Tag công nghệ góc trên bên trái */}
+                    <div className="absolute left-3 top-3">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/55 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-zinc-300 backdrop-blur-md">
+                        <span className="h-1 w-1 rounded-full bg-accent-cyan" />
+                        {item.tag}
+                      </span>
+                    </div>
+
+                    {/* Badge thể loại góc trên bên phải */}
+                    <div className="absolute right-3 top-3">
+                      <span className="rounded-full border border-accent-purple/30 bg-accent-purple/20 px-2.5 py-0.5 font-mono text-[10px] text-accent-purple backdrop-blur-md">
+                        {item.category}
+                      </span>
+                    </div>
+
+                    {/* Chân ảnh: Tiêu đề và chú thích nghệ thuật */}
+                    <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+                      <div className="font-mono text-[11px] uppercase tracking-wider text-accent-cyan/90">
+                        {item.location}
+                      </div>
+                      <h3 className="mt-1 font-display text-lg font-bold text-white transition-colors duration-300 group-hover:text-accent-cyan">
+                        {item.title}
+                      </h3>
+                      <p className="mt-1.5 text-xs leading-relaxed text-zinc-300/90">
+                        {item.caption}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -18,47 +18,39 @@ export function FluidSmoke() {
       fluid.setConfig({
         simResolution: 128,
         dyeResolution: 1024,
-        densityDissipation: 1.8, // Khói tan êm ái, giữ vệt sóng lụa lâu hơn
-        velocityDissipation: 1.4,
+        densityDissipation: 2.8, // Khói tan nhanh và êm dịu, không bị đọng thành đám mây dày
+        velocityDissipation: 1.8,
         pressure: 0.8,
-        curl: 32, // Xoáy cuộn nghệ thuật sống động
-        splatRadius: 0.28,
-        splatForce: 6000,
+        curl: 24, // Xoáy cuộn mềm mại, thanh thoát
+        splatRadius: 0.13, // ĐÃ GIẢM: Vệt khói mảnh mai, tinh tế, không bị to chiếm màn hình
+        splatForce: 3200, // Lực đẩy vừa phải, êm ái
         shading: true,
         colorful: false,
-        colorPalette: ['#4F7CFF', '#8B5CF6', '#22D3EE', '#6366F1', '#A855F7', '#38BDF8'],
+        colorPalette: ['#4F7CFF', '#8B5CF6', '#22D3EE', '#6366F1'], // Sắc màu thanh nhã
         hover: true,
         transparent: true,
-        backgroundColor: '#00000000', // 100% trong suốt
+        backgroundColor: '#00000000',
         bloom: true,
-        bloomIntensity: 0.9,
-        bloomThreshold: 0.4,
-        brightness: 0.95,
+        bloomIntensity: 0.22, // ĐÃ GIẢM: Độ phát sáng êm dịu, hoàn toàn không bị chói mắt
+        bloomThreshold: 0.7, // Chỉ phát quang nhẹ ở lõi vệt khói
+        brightness: 0.52, // ĐÃ GIẢM: Độ sáng dịu mắt, hài hòa với giao diện tối sang trọng
       })
 
       fluid.start()
 
-      // Khởi tạo các vệt khói cực quang chào đón khi vào trang
-      setTimeout(() => {
-        try {
-          fluid.multipleSplats(4)
-        } catch (e) {}
-      }, 250)
-
+      // Khởi tạo một vệt gợn sóng nhẹ ban đầu, không gây giật mình
       setTimeout(() => {
         try {
           const cx = window.innerWidth / 2
-          const cy = window.innerHeight / 2
-          fluid.splatAtLocation(cx - 120, cy, 350, 150)
-          fluid.splatAtLocation(cx + 120, cy, -350, -150)
+          const cy = window.innerHeight * 0.4
+          fluid.splatAtLocation(cx, cy, 100, 60)
         } catch (e) {}
-      }, 500)
+      }, 400)
     } catch (err) {
       console.warn('WebGL Fluid initialization skipped:', err)
       return
     }
 
-    // Lắng nghe trực tiếp trên window để hoạt động 100% chuẩn xác trên cả Desktop (chuột) và Mobile (cảm ứng)
     let lastX = 0
     let lastY = 0
     let hasMoved = false
@@ -83,9 +75,9 @@ export function FluidSmoke() {
       const dist = Math.hypot(dx, dy)
       const dt = Math.max(now - lastTime, 16)
 
-      // Kích hoạt vệt khói theo di chuyển chuột
-      if (dist > 3) {
-        const factor = Math.min(Math.max(dist / dt, 1), 6) * 10
+      // Chỉ kích hoạt khi chuột di chuyển rõ ràng, lực vừa phải thanh thoát
+      if (dist > 6) {
+        const factor = Math.min(Math.max(dist / dt, 0.5), 2.5) * 3
         fluid.splatAtLocation(x, y, dx * factor, -dy * factor)
         lastX = x
         lastY = y
@@ -95,8 +87,8 @@ export function FluidSmoke() {
 
     const handlePointerDown = (e) => {
       if (!fluid) return
-      // Khi click chuột: Bùng nổ đợt khói rực rỡ tại vị trí bấm
-      fluid.splatAtLocation(e.clientX, e.clientY, (Math.random() - 0.5) * 700, (Math.random() - 0.5) * 700)
+      // Nhấp chuột: Phun một đốm khói nhỏ nhẹ dịu
+      fluid.splatAtLocation(e.clientX, e.clientY, (Math.random() - 0.5) * 200, (Math.random() - 0.5) * 200)
     }
 
     const handleTouchMove = (e) => {
@@ -105,21 +97,21 @@ export function FluidSmoke() {
       handlePointerMove({ clientX: touch.clientX, clientY: touch.clientY })
     }
 
-    // Khi cuộn trang nhanh, kích thích tạo thêm vệt khói xoáy cực quang
+    // Khi cuộn trang, tạo vệt khói nhẹ
     let lastScrollY = window.scrollY
     let scrollThrottle = 0
     const handleScroll = () => {
       const now = performance.now()
-      if (now - scrollThrottle < 160) return
+      if (now - scrollThrottle < 200) return
       const currentScrollY = window.scrollY
       const delta = Math.abs(currentScrollY - lastScrollY)
       lastScrollY = currentScrollY
 
-      if (delta > 40 && fluid) {
+      if (delta > 50 && fluid) {
         scrollThrottle = now
-        const x = window.innerWidth * (0.25 + Math.random() * 0.5)
-        const y = window.innerHeight * (0.2 + Math.random() * 0.6)
-        fluid.splatAtLocation(x, y, (Math.random() - 0.5) * 700, -delta * 5)
+        const x = window.innerWidth * (0.3 + Math.random() * 0.4)
+        const y = window.innerHeight * (0.3 + Math.random() * 0.4)
+        fluid.splatAtLocation(x, y, (Math.random() - 0.5) * 300, -delta * 2)
       }
     }
 
@@ -147,7 +139,7 @@ export function FluidSmoke() {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden opacity-90"
+      className="pointer-events-none fixed inset-0 z-0 h-full w-full overflow-hidden opacity-60"
     />
   )
 }
