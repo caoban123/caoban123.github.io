@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { ArrowUpRight, Github, MapPin, Sparkles } from 'lucide-react'
+import { ArrowUpRight, Github, MapPin, Sparkles, FileText, Download, Eye, GraduationCap } from 'lucide-react'
 import { Reveal } from '../ui/Reveal'
 import { BentoCard } from '../ui/BentoCard'
 import { TiltCard } from '../ui/TiltCard'
+import { CVModal } from '../ui/CVModal'
 import { site } from '../../data/site'
 import { researchData } from '../../data/research'
+import { soundFx } from '../../lib/sound'
 
 const focusAreas = ['AI / ML', 'RAG & LLM', 'Computer Vision', 'AI Research']
 
@@ -58,6 +60,7 @@ function LocalTime() {
 }
 
 export function About() {
+  const [cvOpen, setCvOpen] = useState(false)
   return (
     <section id="about" className="relative py-28">
       <div className="mx-auto max-w-7xl px-6">
@@ -173,6 +176,67 @@ export function About() {
               </div>
             </BentoCard>
           </Reveal>
+
+          {/* Card Hồ Sơ Năng Lực & CV Chính Thức */}
+          <Reveal className="md:col-span-6" delay={0.28}>
+            <BentoCard className="p-6 sm:p-8">
+              <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-accent-cyan/30 bg-accent-cyan/10 px-3 py-1 font-mono text-[11px] font-semibold text-accent-cyan">
+                      <FileText className="h-3.5 w-3.5" /> HỒ SƠ NĂNG LỰC &amp; CV CHÍNH THỨC
+                    </span>
+                    <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 font-mono text-[11px] font-bold text-amber-300">
+                      GPA 3.7 / 4.0
+                    </span>
+                    <span className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-0.5 font-mono text-[11px] font-bold text-cyan-300">
+                      TOEIC 900+
+                    </span>
+                  </div>
+
+                  <h3 className="font-display text-xl font-bold text-white sm:text-2xl">
+                    Cử nhân Trí tuệ Nhân tạo — Đại học Khoa học Tự nhiên (HCMUS)
+                  </h3>
+
+                  <p className="max-w-2xl text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                    Đào tạo AI chính quy với các môn học cốt lõi: <strong className="text-zinc-200">Data Structures &amp; Algorithms, Linear Algebra, Probability &amp; Statistics, Machine Learning, Database Systems, Computer Architecture</strong>. Đã triển khai các hệ thống thực chiến về Generative AI RAG, Computer Vision và Multi-Agent.
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-4 pt-1 font-mono text-xs text-zinc-400">
+                    <span className="text-zinc-300 font-medium">SĐT: {site.phone}</span>
+                    <span>•</span>
+                    <span className="text-zinc-300 font-medium">Email: {site.email}</span>
+                    <span>•</span>
+                    <span className="text-zinc-300 font-medium">GitHub: @caoban123</span>
+                    <span>•</span>
+                    <span className="text-zinc-300 font-medium">LinkedIn: caoban123</span>
+                  </div>
+                </div>
+
+                <div className="flex shrink-0 flex-wrap items-center gap-3">
+                  <button
+                    onClick={() => {
+                      soundFx.playClick()
+                      setCvOpen(true)
+                    }}
+                    onMouseEnter={() => soundFx.playHover()}
+                    className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/40 bg-accent-cyan/15 px-5 py-2.5 font-mono text-xs font-semibold text-accent-cyan shadow-[0_0_20px_rgba(34,211,238,0.2)] transition-all hover:bg-accent-cyan/25 hover:border-accent-cyan hover:scale-105"
+                  >
+                    <Eye className="h-4 w-4" /> Xem CV Tương Tác 📄
+                  </button>
+
+                  <a
+                    href={`${import.meta.env.BASE_URL}Nguyen_Cao_Ban_CV.pdf`}
+                    download="Nguyen_Cao_Ban_CV.pdf"
+                    onClick={() => soundFx.playClick()}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2.5 font-mono text-xs font-semibold text-white transition-all hover:bg-white/20 hover:scale-105"
+                  >
+                    <Download className="h-4 w-4" /> Tải CV PDF ⤓
+                  </a>
+                </div>
+              </div>
+            </BentoCard>
+          </Reveal>
         </div>
 
         {/* Khoảnh khắc & Bản sắc cá nhân — 3 Ảnh ở cùng 1 dòng trên Desktop */}
@@ -246,6 +310,9 @@ export function About() {
             ))}
           </div>
         </div>
+
+        {/* Modal Hồ sơ năng lực & CV tương tác chi tiết */}
+        <CVModal isOpen={cvOpen} onClose={() => setCvOpen(false)} />
       </div>
     </section>
   )

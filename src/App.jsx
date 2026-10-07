@@ -16,7 +16,6 @@ import { Projects } from './components/projects/Projects'
 import { Research } from './components/research/Research'
 import { Skills } from './components/skills/Skills'
 import { Experience } from './components/experience/Experience'
-import { Contact } from './components/contact/Contact'
 import { Footer } from './components/layout/Footer'
 
 const prefersReducedMotion =
@@ -72,7 +71,6 @@ export default function App() {
           <Research />
           <Skills />
           <Experience />
-          <Contact />
         </main>
 
         {/* Chân trang */}

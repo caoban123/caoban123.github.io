@@ -7,8 +7,14 @@ export const site = {
   github: 'https://github.com/caoban123',
   linkedin: 'https://www.linkedin.com/in/caoban123',
   facebook: 'https://www.facebook.com/nguyen.ban.591323/about',
-  email: 'caoban170106@gmail.com', // Email liên hệ chính xác của người dùng
-  cv: '', // Sẽ hiển thị khi có file đặt tại public/cv/
-  gpa: '3.88 / 4.0',
+  email: 'caoban170106@gmail.com',
+  phone: '0934722451',
+  cv: '/Nguyen_Cao_Ban_CV.pdf',
+  gpa: '3.7 / 4.0',
+  gpaScale: '4.0',
   toeic: '900+',
+  university: 'Ho Chi Minh City University of Science (HCMUS)',
+  universityVi: 'Đại học Khoa học Tự nhiên ĐHQG-HCM',
+  major: 'Bachelor of Science in Artificial Intelligence',
+  majorVi: 'Cử nhân ngành Trí tuệ Nhân tạo',
 }

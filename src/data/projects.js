@@ -77,7 +77,7 @@ export const projects = [
     category: 'AI Agents',
     description:
       'Trợ lý Agent doanh nghiệp kết hợp suy luận trên dữ liệu tài chính có cấu trúc và engine luật xác định (rule engine) nhằm đảm bảo tính chuẩn xác theo quy định thuế Việt Nam.',
-    image: null,
+    image: '/images/projects/financial-agent.webp',
     tags: ['AI Agent', 'Rule Engine', 'Structured Data', 'Tax Compliance', 'FastAPI'],
     github: site.github,
     demo: null,
